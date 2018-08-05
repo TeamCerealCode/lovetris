@@ -39,14 +39,13 @@ function love.draw()
     -- debug menu. use if you want to test something instead of littering code !!!!
     if displaydebug then
         love.graphics.setColor(1, 1, 1, 0.9) 
-        -- note to self: tostring()
         love.graphics.print('render options:')
-        love.graphics.print('gridy size: '..tostring(gridysize), 0, 15) 
-        love.graphics.print('gridx size: '..tostring(gridxsize), 0, 30) 
-        love.graphics.print('tile size: '..tostring(tilesize), 0, 45)
+        love.graphics.print('gridy size: '..gridysize, 0, 15) 
+        love.graphics.print('gridx size: '..gridxsize, 0, 30) 
+        love.graphics.print('tile size: '..tilesize, 0, 45)
         love.graphics.print('misc variables and such:', 0, 60) 
-        love.graphics.print('width: '..tostring(width), 0, 75) 
-        love.graphics.print('height: '..tostring(height), 0, 90) 
+        love.graphics.print('width: '..width, 0, 75) 
+        love.graphics.print('height: '..height, 0, 90) 
     end
 end
 
