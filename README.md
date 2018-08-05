@@ -1,2 +1,2 @@
-# love_tetris
+# lovetris
 Tetris styled game made in Love2D
