@@ -20,7 +20,7 @@ function love.draw()
     if displaydebug then
         love.graphics.setColor(1, 1, 1, 0.9)
         -- note to self: tostring()
-        love.graphics.print('nothing atm', 0, 0) 
+        love.graphics.print('nothing atm') 
     end
 end
 
