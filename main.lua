@@ -28,7 +28,7 @@ end
 
 function love.draw()
     -- grid draw
-    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setColor(1, 1, 1)
     for n = 0, tilesize * gridxsize, tilesize do
         love.graphics.line(windowcenterx - tilesize * gridxsize / 2 + n, windowcentery - tilesize * gridysize / 2, windowcenterx - tilesize * gridxsize / 2 + n, windowcentery + tilesize * gridysize / 2)
     end
