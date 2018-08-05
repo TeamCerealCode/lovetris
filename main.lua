@@ -45,6 +45,7 @@ function love.draw()
     love.graphics.setColor(1, 1, 1)
     for n = 0, tilesize * gridwidth, tilesize do
         love.graphics.line(windowcenterx - tilesize * gridwidth / 2 + n, windowcentery - tilesize * gridheight / 2, windowcenterx - tilesize * gridwidth / 2 + n, windowcentery + tilesize * gridheight / 2)
+    end
     for i = 0, tilesize * gridheight, tilesize do
         love.graphics.line(windowcenterx - tilesize * gridwidth / 2, windowcentery - tilesize * gridheight / 2 + i, windowcenterx + tilesize * gridwidth / 2, windowcentery - tilesize * gridheight / 2 + i)
     end
