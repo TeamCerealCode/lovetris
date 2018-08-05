@@ -9,15 +9,11 @@ local windowcentery = height / 2
 function love.draw()
     -- grid draw
     love.graphics.setColor(1, 1, 1, 1)
-    local n = 0
-    while n < 220 do
+	for n = 1, 220, 20 do
         love.graphics.line(windowcenterx-100+n, windowcentery-200, windowcenterx-100+n, windowcentery+200)
-        n = n + 20
     end
-    local i = 0
-    while i < 420 do
-        love.graphics.line(windowcenterx-100, windowcentery-200+i, windowcenterx+100, windowcentery-200+i)
-        i = i + 20
+	for n = 1, 420, 20 do
+        love.graphics.line(windowcenterx-100, windowcentery-200+n, windowcenterx+100, windowcentery-200+n)
     end
 
     -- debug menu. use if you want to test something instead of littering code !!!!
