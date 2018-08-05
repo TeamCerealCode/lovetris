@@ -33,3 +33,10 @@ function love.keypressed(key)
         displaydebug = not displaydebug
     end
 end
+
+function love.resize(w, h)
+    width = w
+    height = h
+    windowcenterx = width / 2
+    windowcentery = height / 2
+end
