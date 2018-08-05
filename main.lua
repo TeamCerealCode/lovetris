@@ -52,11 +52,6 @@ function love.update(dt)
 
 end
 
-function love.load()
-    -- make window resizable
-    love.window.setMode(800, 600, {resizable=true, vsync=false, minwidth=450, minheight=510})
-end
-
 function love.keypressed(key)
     -- debug menu
     if key == 'f3' then
