@@ -6,10 +6,6 @@ local displaydebug = false
 local windowcenterx = width/2
 local windowcentery = height/2
 
--- set default launch things like title etc
-love.window.setTitle("lovetris")
-
-
 function love.draw()
     -- grid draw
     love.graphics.setColor(1,1,1,1)
