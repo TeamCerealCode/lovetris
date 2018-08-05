@@ -6,34 +6,60 @@ local displaydebug = false
 local windowcenterx = width / 2
 local windowcentery = height / 2
 
-local tilesize = 20
+_G.tilesize = 20
 
-local gridxsize = 10
-local gridysize = 20
+_G. gridwidth = 10
+_G. gridheight = 20
+
+_G. gridstartx = windowcenterx - tilesize * gridwidth / 2
+_G. gridstarty = windowcentery - tilesize * gridheight / 2
 
 -- grid made the size of the window (dont actually use in final code, just a little fun script)
--- gridysize = math.floor(height/tilesize)
--- gridxsize = math.floor(width/tilesize)
+-- gridheight = math.floor(height/tilesize)
+-- gridwidth = math.floor(width/tilesize)
 
 -- make the grid variable
-local gridx = {}
-local gridy = {}
-local n = 0
-for n = 0, gridxsize-1, 1 do
-    table.insert(gridx, #gridx+1, "empty")
+_G.grid = {}
+for i = 0, gridheight-1 do
+    row = {}
+    for j = 0, gridwidth-1 do
+        row[j] = 0
+    end
+    grid[i] = row
 end
-for n = 0, gridysize-1, 1 do
-    table.insert(gridy, #gridy+1, gridx)
+
+local tickt = 0
+
+local OBlock = require 'pieces'
+
+local currentBlock = OBlock(3,0)
+
+
+function love.load()
+    -- make window resizable
+    love.window.setMode(800, 600, {resizable=true, vsync=false, minwidth=450, minheight=510})
 end
 
 function love.draw()
     -- grid draw
-    love.graphics.setColor(1, 1, 1, 1)
-    for n = 0, tilesize * gridxsize, tilesize do
-        love.graphics.line(windowcenterx - tilesize * gridxsize / 2 + n, windowcentery - tilesize * gridysize / 2, windowcenterx - tilesize * gridxsize / 2 + n, windowcentery + tilesize * gridysize / 2)
+    love.graphics.setColor(1, 1, 1)
+    for n = 0, tilesize * gridwidth, tilesize do
+        love.graphics.line(windowcenterx - tilesize * gridwidth / 2 + n, windowcentery - tilesize * gridheight / 2, windowcenterx - tilesize * gridwidth / 2 + n, windowcentery + tilesize * gridheight / 2)
     end
-    for i = 0, tilesize * gridysize, tilesize do
-        love.graphics.line(windowcenterx - tilesize * gridxsize / 2, windowcentery - tilesize * gridysize / 2 + i, windowcenterx + tilesize * gridxsize / 2, windowcentery - tilesize * gridysize / 2 + i)
+    for i = 0, tilesize * gridheight, tilesize do
+        love.graphics.line(windowcenterx - tilesize * gridwidth / 2, windowcentery - tilesize * gridheight / 2 + i, windowcenterx + tilesize * gridwidth / 2, windowcentery - tilesize * gridheight / 2 + i)
+    end
+
+    currentBlock:draw()
+
+    -- drawing the grid
+    love.graphics.setColor(1, 1, 1)
+    for i = 0, gridheight-1 do
+        for j = 0, gridwidth-1 do
+            if grid[i][j] ~= 0 then
+                love.graphics.rectangle("fill",j*tilesize+gridstartx,i*tilesize+gridstarty,tilesize,tilesize)
+            end
+        end
     end
 
     -- debug menu. use if you want to test something instead of littering code !!!!
@@ -41,22 +67,25 @@ function love.draw()
         love.graphics.setColor(1, 1, 1, 0.9) 
         -- note to self: tostring()
         love.graphics.print('render options:')
-        love.graphics.print('gridy size: '..tostring(gridysize), 0, 15) 
-        love.graphics.print('gridx size: '..tostring(gridxsize), 0, 30) 
-        love.graphics.print('tile size: '..tostring(tilesize), 0, 45)
+        love.graphics.print('gridy size: '..gridheight, 0, 15) 
+        love.graphics.print('gridx size: '..gridwidth, 0, 30) 
+        love.graphics.print('tile size: '..tilesize, 0, 45)
         love.graphics.print('misc variables and such:', 0, 60) 
-        love.graphics.print('width: '..tostring(width), 0, 75) 
-        love.graphics.print('height: '..tostring(height), 0, 90) 
+        love.graphics.print('width: '..width, 0, 75) 
+        love.graphics.print('height: '..height, 0, 90) 
+        love.graphics.print('block x: '..currentBlock.x, 0, 105) 
+        love.graphics.print('block y: '..currentBlock.y, 0, 120) 
     end
 end
 
 function love.update(dt)
-
-end
-
-function love.load()
-    -- make window resizable
-    love.window.setMode(800, 600, {resizable=true, vsync=false, minwidth=450, minheight=510})
+    tickt = tickt + dt
+    if tickt > 0.1 then
+        tickt = 0
+        if not currentBlock:update() then
+            currentBlock = OBlock(3,0)
+        end
+    end
 end
 
 function love.keypressed(key)
