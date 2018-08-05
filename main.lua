@@ -18,7 +18,6 @@ local gridysize = 20
 -- make the grid variable
 local gridx = {}
 local gridy = {}
-local n = 0
 for n = 0, gridxsize-1, 1 do
     table.insert(gridx, #gridx+1, "empty")
 end
