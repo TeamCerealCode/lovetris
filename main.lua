@@ -22,7 +22,6 @@ local n = 0
 for n = 0, gridxsize-1, 1 do
     table.insert(gridx, #gridx+1, "empty")
 end
-n = 0
 for n = 0, gridysize-1, 1 do
     table.insert(gridy, #gridy+1, gridx)
 end
@@ -46,12 +45,18 @@ function love.draw()
         love.graphics.print('gridx size: '..tostring(gridxsize), 0, 30) 
         love.graphics.print('tile size: '..tostring(tilesize), 0, 45)
         love.graphics.print('misc variables and such:', 0, 60) 
-        love.graphics.print('none', 0, 75) 
+        love.graphics.print('width: '..tostring(width), 0, 75) 
+        love.graphics.print('height: '..tostring(height), 0, 90) 
     end
 end
 
 function love.update(dt)
 
+end
+
+function love.load()
+    -- make window resizable
+    love.window.setMode(800, 600, {resizable=true, vsync=false, minwidth=450, minheight=510})
 end
 
 function love.keypressed(key)
