@@ -27,9 +27,9 @@ end
 function love.update(dt)
 end
 
-function love.keypressed(key, scancode, isrepeat)
+function love.keypressed(key)
     -- debug menu
     if key == 'f3' then
-        if displaydebug then displaydebug = false else displaydebug = true end
+        displaydebug = not displaydebug
     end
 end
