@@ -1,9 +1,10 @@
 -- variables n stuff
-width = love.graphics.getWidth( display )
-height = love.graphics.getHeight( display )
+local width = love.graphics.getWidth()
+local height = love.graphics.getHeight()
 
-windowcenterx = width/2
-windowcentery = height/2
+local displaydebug = false
+local windowcenterx = width/2
+local windowcentery = height/2
 
 -- set default launch things like title etc
 love.window.setTitle("lovetris")
@@ -12,12 +13,12 @@ love.window.setTitle("lovetris")
 function love.draw()
     -- grid draw
     love.graphics.setColor(1,1,1,1)
-    n = 0
+    local n = 0
     while n<220 do
         love.graphics.line(windowcenterx-100+n, windowcentery-200, windowcenterx-100+n, windowcentery+200)
         n = n + 20
     end
-    i = 0
+    local i = 0
     while i<420 do
         love.graphics.line(windowcenterx-100, windowcentery-200+i, windowcenterx+100, windowcentery-200+i)
         i = i + 20
