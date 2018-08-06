@@ -1,15 +1,15 @@
 local class = require 'middleclass'
 
-local OBlock = class("OBlock")
+local OBlock = class('OBlock')
 
-function OBlock:initialize(x,y) 
+function OBlock:initialize(x,y)
    self.x = x
    self.y = y
 end
 
 function OBlock:draw()
     love.graphics.setColor(0.93, 0.95, 0.25)
-    love.graphics.rectangle("fill",self.x*tilesize+gridstartx,self.y*tilesize+gridstarty,tilesize*2,tilesize*2)
+    love.graphics.rectangle('fill', self.x * tilesize + gridstartx, self.y * tilesize + gridstarty, tilesize * 2, tilesize * 2)
 end
 
 function OBlock:update()
@@ -35,12 +35,12 @@ function OBlock:toGrid()
 end
 
 function OBlock:move()
-    if love.keyboard.isDown("left") then
+    if love.keyboard.isDown('left') then
         if self.x > 0 and grid[self.y][self.x - 1] == 0 and grid[self.y + 1][self.x - 1] == 0 then
             self.x = self.x - 1
         end
     end
-    if love.keyboard.isDown("right") then
+    if love.keyboard.isDown('right') then
         if self.x < gridwidth - 2 and grid[self.y][self.x + 2] == 0 and grid[self.y + 1][self.x + 2] == 0 then
             self.x = self.x + 1
         end
