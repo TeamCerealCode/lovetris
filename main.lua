@@ -37,8 +37,6 @@ local currentBlock = OBlock(3,0)
 
 
 function love.load()
-    -- make window resizable
-    love.window.setMode(800, 600, {resizable=true, vsync=false, minwidth=450, minheight=510})
 end
 
 function love.draw()
@@ -59,7 +57,7 @@ function love.draw()
         for j = 0, gridwidth-1 do
             if grid[i][j] ~= 0 then
                 if grid[i][j] == 4 then love.graphics.setColor(0.93, 0.95, 0.25) end
-                love.graphics.rectangle("fill",j*tilesize+gridstartx,i*tilesize+gridstarty,tilesize,tilesize)
+                love.graphics.rectangle('fill', j * tilesize + gridstartx, i * tilesize + gridstarty, tilesize, tilesize)
             end
         end
     end
@@ -84,7 +82,7 @@ function love.update(dt)
     if tickt > fallSpd then
         tickt = 0
         if not currentBlock:update() then
-            currentBlock = OBlock(3,0)
+            currentBlock = OBlock(3, 0)
         end
         clearLines()
     end
@@ -97,13 +95,13 @@ function love.keypressed(key)
     end
     -- down
     if key == 'down' then
-        _G.fallSpd = _G.fallSpd/2
+        fallSpd = fallSpd / 2
     end
 end
 
 function love.keyreleased(key)
     if key == 'down' then
-        _G.fallSpd = _G.fallSpd*2
+        fallSpd = fallSpd * 2
     end
 end
 
@@ -135,7 +133,7 @@ function movedown(h)
 end
 
 function love.resize(w, h) 
-    _G.tilesize = (width + height) / 70
+    tilesize = (width + height) / 70
     width = w 
     height = h 
     windowcenterx = width / 2 
