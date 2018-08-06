@@ -76,6 +76,7 @@ function love.draw()
         love.graphics.print('height: '..height, 0, 90) 
         love.graphics.print('block x: '..currentBlock.x, 0, 105) 
         love.graphics.print('block y: '..currentBlock.y, 0, 120) 
+        love.graphics.print('press r to reset', 0, 135)
     end
 end
 
@@ -99,11 +100,23 @@ function love.keypressed(key)
     if key == 'down' then
         _G.fallSpd = _G.fallSpd/2
     end
+    -- reset key
+    if key == "r" then
+        currentBlock = OBlock(3,0)
+        grid = {}
+        for i = 0, gridheight-1 do
+            row = {}
+            for j = 0, gridwidth-1 do
+                row[j] = 0
+            end
+            grid[i] = row
+        end
+    end
 end
 
 function love.keyreleased(key)
     if key == 'down' then
-        _G.fallSpd = _G.fallSpd*2
+        fallSpd = fallSpd*2
     end
 end
 
@@ -135,7 +148,7 @@ function movedown(h)
 end
 
 function love.resize(w, h) 
-    _G.tilesize = (width + height) / 70
+    tilesize = (width + height) / 70
     width = w 
     height = h 
     windowcenterx = width / 2 
