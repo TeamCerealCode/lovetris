@@ -8,11 +8,11 @@ local windowcentery = height / 2
 
 _G.tilesize = 20
 
-_G. gridwidth = 10
-_G. gridheight = 20
+_G.gridwidth = 10
+_G.gridheight = 20
 
-_G. gridstartx = windowcenterx - tilesize * gridwidth / 2
-_G. gridstarty = windowcentery - tilesize * gridheight / 2
+_G.gridstartx = windowcenterx - tilesize * gridwidth / 2
+_G.gridstarty = windowcentery - tilesize * gridheight / 2
 
 -- grid made the size of the window (dont actually use in final code, just a little fun script)
 -- gridheight = math.floor(height/tilesize)
@@ -29,6 +29,7 @@ for i = 0, gridheight-1 do
 end
 
 local tickt = 0
+_G.fallSpd = 0.1
 
 local OBlock = require 'pieces'
 
@@ -57,6 +58,7 @@ function love.draw()
     for i = 0, gridheight-1 do
         for j = 0, gridwidth-1 do
             if grid[i][j] ~= 0 then
+                if grid[i][j] == 4 then love.graphics.setColor(0.93, 0.95, 0.25) end
                 love.graphics.rectangle("fill",j*tilesize+gridstartx,i*tilesize+gridstarty,tilesize,tilesize)
             end
         end
@@ -79,11 +81,12 @@ end
 
 function love.update(dt)
     tickt = tickt + dt
-    if tickt > 0.1 then
+    if tickt > fallSpd then
         tickt = 0
         if not currentBlock:update() then
             currentBlock = OBlock(3,0)
         end
+        clearLines()
     end
 end
 
@@ -94,9 +97,37 @@ function love.keypressed(key)
     end
 end
 
+function clearLines()
+    for i = 0, gridheight-1 do
+        row = grid[i]
+        complete = true 
+        for k,v in pairs(row) do
+            if v == 0 then
+                complete = false
+                break
+            end
+        end
+        if complete then
+            movedown(i)
+        end
+    end
+end
+
+function movedown(h)
+    for i = h-1, 0, -1 do
+        grid[i + 1] = grid[i]
+    end
+    for i = 0, gridwidth-1 do
+        grid[0][i] = 0
+    end
+
+end
+
 function love.resize(w, h) 
     width = w 
     height = h 
     windowcenterx = width / 2 
     windowcentery = height / 2 
+    gridstartx = windowcenterx - tilesize * gridwidth / 2
+    gridstarty = windowcentery - tilesize * gridheight / 2
 end

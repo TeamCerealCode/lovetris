@@ -18,6 +18,10 @@ function OBlock:update()
         self:toGrid()
         return false
     end
+    if grid[self.y + 2][self.x] ~= 0 or grid[self.y + 2][self.x + 1] ~= 0 then
+        self:toGrid()
+        return false
+    end
 
     self.y = self.y + 1
     return true
@@ -32,12 +36,12 @@ end
 
 function OBlock:move()
     if love.keyboard.isDown("left") then
-        if self.x > 0 then
+        if self.x > 0 and grid[self.y][self.x - 1] == 0 and grid[self.y + 1][self.x - 1] == 0 then
             self.x = self.x - 1
         end
     end
     if love.keyboard.isDown("right") then
-        if self.x < gridwidth - 2 then
+        if self.x < gridwidth - 2 and grid[self.y][self.x + 2] == 0 and grid[self.y + 1][self.x + 2] == 0 then
             self.x = self.x + 1
         end
     end
