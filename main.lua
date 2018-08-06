@@ -6,6 +6,9 @@ local displaydebug = false
 local windowcenterx = width / 2
 local windowcentery = height / 2
 
+local rainbowmode = false
+local rainbowmodeCounter = 0
+
 _G.tilesize = 20
 
 _G.gridwidth = 10
@@ -35,6 +38,16 @@ local OBlock = require 'pieces'
 
 local currentBlock = OBlock(3,0)
 
+function rainbowmodeCheck()
+    if rainbowmode then
+        if     math.floor(rainbowmodeCounter)%320 < 80 then love.graphics.setColor(0.5, 0, 0.5)
+        elseif math.floor(rainbowmodeCounter)%320 < 160 then love.graphics.setColor(1, 0.5, 0)
+        elseif math.floor(rainbowmodeCounter)%320 < 240 then love.graphics.setColor(0.5, 1, 0.5)
+        elseif math.floor(rainbowmodeCounter)%320 < 320 then love.graphics.setColor(0, 0.5, 1)
+        end
+    end
+    rainbowmodeCounter = rainbowmodeCounter + 0.1
+end
 
 function love.load()
     -- make window resizable
@@ -67,15 +80,25 @@ function love.draw()
     -- debug menu. use if you want to test something instead of littering code !!!!
     if displaydebug then
         love.graphics.setColor(1, 1, 1, 0.9) 
+        rainbowmodeCheck()
         love.graphics.print('render options:')
+        rainbowmodeCheck()
         love.graphics.print('gridy size: '..gridheight, 0, 15) 
+        rainbowmodeCheck()
         love.graphics.print('gridx size: '..gridwidth, 0, 30) 
+        rainbowmodeCheck()
         love.graphics.print('tile size: '..tilesize, 0, 45)
+        rainbowmodeCheck()
         love.graphics.print('misc variables and such:', 0, 60) 
+        rainbowmodeCheck()
         love.graphics.print('width: '..width, 0, 75) 
+        rainbowmodeCheck()
         love.graphics.print('height: '..height, 0, 90) 
+        rainbowmodeCheck()
         love.graphics.print('block x: '..currentBlock.x, 0, 105) 
+        rainbowmodeCheck()
         love.graphics.print('block y: '..currentBlock.y, 0, 120) 
+        rainbowmodeCheck()
         love.graphics.print('press r to reset', 0, 135)
     end
 end
@@ -111,6 +134,10 @@ function love.keypressed(key)
             end
             grid[i] = row
         end
+    end
+
+    if key == 'f' and love.keyboard.isDown('f3') then
+        rainbowmode = not rainbowmode
     end
 end
 
