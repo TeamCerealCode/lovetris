@@ -1,10 +1,11 @@
 local class = require 'middleclass'
 
-local OBlock = class('OBlock')
+local Piece = require 'piece'
+
+local OBlock = class('OBlock',Piece)
 
 function OBlock:initialize(x,y)
-   self.x = x
-   self.y = y
+    Piece.initialize(self,x,y,4)
 end
 
 function OBlock:draw()
