@@ -95,7 +95,18 @@ function love.keypressed(key)
     if key == 'f3' then
         displaydebug = not displaydebug
     end
+    -- down
+    if key == 'down' then
+        _G.fallSpd = _G.fallSpd/2
+    end
 end
+
+function love.keyreleased(key)
+    if key == 'down' then
+        _G.fallSpd = _G.fallSpd*2
+    end
+end
+
 
 function clearLines()
     for i = 0, gridheight-1 do
@@ -124,6 +135,7 @@ function movedown(h)
 end
 
 function love.resize(w, h) 
+    _G.tilesize = (width + height) / 70
     width = w 
     height = h 
     windowcenterx = width / 2 
