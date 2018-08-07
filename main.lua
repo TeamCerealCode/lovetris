@@ -11,6 +11,7 @@ local windowcentery = height / 2
 local rainbowmode = false
 local rainbowmodeCounter = 0
 
+
 _G.tilesize = 20
 
 _G.gridwidth = 10
@@ -38,7 +39,7 @@ _G.fallSpd = 0.1
 
 local OBlock = require 'pieces'
 
-local currentBlock = OBlock(3,0)
+local currentBlock = OBlock(4,0)
 
 function rainbowmodeCheck()
     if rainbowmode then
@@ -164,9 +165,16 @@ function clearLines()
     end
 end
 
+function copytable(obj)
+    if type(obj) ~= 'table' then return obj end
+    local res = {}
+    for k, v in pairs(obj) do res[copytable(k)] = copytable(v) end
+    return res
+end
+
 function movedown(h)
     for i = h-1, 0, -1 do
-        grid[i + 1] = grid[i]
+        grid[i + 1] = copytable(grid[i])
     end
     for i = 0, gridwidth-1 do
         grid[0][i] = 0

@@ -3,7 +3,7 @@ local Piece = require 'piece'
 local OBlock = class('OBlock',Piece)
 
 function OBlock:initialize(x,y)
-    Piece.initialize(self,x,y,4)
+    Piece.initialize(self,x,y,4,3)
 end
 
 function OBlock:draw()
