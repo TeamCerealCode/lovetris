@@ -1,3 +1,4 @@
+_G.utils = require 'utils'
 _G.class = require 'libs.middleclass'
 
 -- variables n stuff
@@ -165,16 +166,9 @@ function clearLines()
     end
 end
 
-function copyTable(obj)
-    if type(obj) ~= 'table' then return obj end
-    local res = {}
-    for k, v in pairs(obj) do res[copyTable(k)] = copyTable(v) end
-    return res
-end
-
 function moveDown(h)
     for i = h - 1, 0, -1 do
-        grid[i + 1] = copyTable(grid[i])
+        grid[i + 1] = utils.copyTable(grid[i])
     end
     for i = 0, gridWidth - 1 do
         grid[0][i] = 0
