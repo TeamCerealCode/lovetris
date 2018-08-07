@@ -7,12 +7,12 @@ function Piece:initialize(x, y, type, size)
     self.size = size
     self.grid = {}
     for i = 0, size-1 do
-	    row = {}
-	    for j = 0, size-1 do
-	        row[j] = 0
-	    end
-	    self.grid[i] = row
-	end
+        row = {}
+        for j = 0, size-1 do
+            row[j] = 0
+        end
+        self.grid[i] = row
+    end
 end
 
 
