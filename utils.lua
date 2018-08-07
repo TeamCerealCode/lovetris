@@ -3,7 +3,7 @@ local utils = {}
 function utils.copyTable(obj)
     if type(obj) ~= 'table' then return obj end
     local res = {}
-    for k, v in pairs(obj) do res[copyTable(k)] = copyTable(v) end
+    for k, v in pairs(obj) do res[utils.copyTable(k)] = utils.copyTable(v) end
     return res
 end
 
