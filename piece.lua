@@ -1,5 +1,3 @@
-local class = require 'middleclass'
-
 local Piece = class('Piece')
 
 function Piece:initialize(x, y, type)

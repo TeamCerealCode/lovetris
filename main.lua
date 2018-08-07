@@ -1,3 +1,5 @@
+_G.class = require 'libs.middleclass'
+
 -- variables n stuff
 local width = love.graphics.getWidth()
 local height = love.graphics.getHeight()

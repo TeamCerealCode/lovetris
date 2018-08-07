@@ -1,5 +1,3 @@
-local class = require 'middleclass'
-
 local Piece = require 'piece'
 
 local OBlock = class('OBlock',Piece)
