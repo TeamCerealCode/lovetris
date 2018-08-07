@@ -9,7 +9,7 @@ local windowCenterX = width / 2
 local windowCenterY = height / 2
 
 local rainbowMode = false
-local rainbowModeCounter = 0
+local rainbowModeTimer = 0
 
 
 _G.tileSize = 20
@@ -43,13 +43,13 @@ local currentBlock = OBlock(4,0)
 
 function rainbowModeCheck()
     if rainbowMode then
-        if     math.floor(rainbowModeCounter)%320 < 80 then love.graphics.setColor(0.5, 0, 0.5)
-        elseif math.floor(rainbowModeCounter)%320 < 160 then love.graphics.setColor(1, 0.5, 0)
-        elseif math.floor(rainbowModeCounter)%320 < 240 then love.graphics.setColor(0.5, 1, 0.5)
-        elseif math.floor(rainbowModeCounter)%320 < 320 then love.graphics.setColor(0, 0.5, 1)
+        if     math.floor(rainbowModeTimer)%320 < 80 then love.graphics.setColor(0.5, 0, 0.5)
+        elseif math.floor(rainbowModeTimer)%320 < 160 then love.graphics.setColor(1, 0.5, 0)
+        elseif math.floor(rainbowModeTimer)%320 < 240 then love.graphics.setColor(0.5, 1, 0.5)
+        elseif math.floor(rainbowModeTimer)%320 < 320 then love.graphics.setColor(0, 0.5, 1)
         end
     end
-    rainbowModeCounter = rainbowModeCounter + 0.1
+    rainbowModeTimer = rainbowModeTimer + 0.1
 end
 
 function love.load()
