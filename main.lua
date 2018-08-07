@@ -26,9 +26,9 @@ _G.gridStartY = windowCenterY - tileSize * gridHeight / 2
 
 -- make the grid variable
 _G.grid = {}
-for i = 0, gridHeight-1 do
+for i = 0, gridHeight - 1 do
     row = {}
-    for j = 0, gridWidth-1 do
+    for j = 0, gridWidth - 1 do
         row[j] = 0
     end
     grid[i] = row
@@ -39,14 +39,14 @@ _G.fallSpd = 0.1
 
 local OBlock = require 'pieces'
 
-local currentBlock = OBlock(4,0)
+local currentBlock = OBlock(4, 0)
 
 function rainbowModeCheck()
     if rainbowMode then
-        if     math.floor(rainbowModeTimer)%320 < 80 then love.graphics.setColor(0.5, 0, 0.5)
-        elseif math.floor(rainbowModeTimer)%320 < 160 then love.graphics.setColor(1, 0.5, 0)
-        elseif math.floor(rainbowModeTimer)%320 < 240 then love.graphics.setColor(0.5, 1, 0.5)
-        elseif math.floor(rainbowModeTimer)%320 < 320 then love.graphics.setColor(0, 0.5, 1)
+        if     math.floor(rainbowModeTimer) % 320 < 80 then love.graphics.setColor(0.5, 0, 0.5)
+        elseif math.floor(rainbowModeTimer) % 320 < 160 then love.graphics.setColor(1, 0.5, 0)
+        elseif math.floor(rainbowModeTimer) % 320 < 240 then love.graphics.setColor(0.5, 1, 0.5)
+        elseif math.floor(rainbowModeTimer) % 320 < 320 then love.graphics.setColor(0, 0.5, 1)
         end
     end
     rainbowModeTimer = rainbowModeTimer + 0.1
@@ -69,8 +69,8 @@ function love.draw()
 
     -- drawing the grid
     love.graphics.setColor(1, 1, 1)
-    for i = 0, gridHeight-1 do
-        for j = 0, gridWidth-1 do
+    for i = 0, gridHeight - 1 do
+        for j = 0, gridWidth - 1 do
             if grid[i][j] ~= 0 then
                 if grid[i][j] == 4 then love.graphics.setColor(0.93, 0.95, 0.25) end
                 love.graphics.rectangle('fill', j * tileSize + gridStartX, i * tileSize + gridStartY, tileSize, tileSize)
@@ -126,11 +126,11 @@ function love.keypressed(key)
     end
     -- reset key
     if key == "r" then
-        currentBlock = OBlock(3,0)
+        currentBlock = OBlock(3, 0)
         grid = {}
-        for i = 0, gridHeight-1 do
+        for i = 0, gridHeight - 1 do
             row = {}
-            for j = 0, gridWidth-1 do
+            for j = 0, gridWidth - 1 do
                 row[j] = 0
             end
             grid[i] = row
@@ -150,7 +150,7 @@ end
 
 
 function clearLines()
-    for i = 0, gridHeight-1 do
+    for i = 0, gridHeight - 1 do
         row = grid[i]
         complete = true 
         for k,v in pairs(row) do
@@ -173,10 +173,10 @@ function copyTable(obj)
 end
 
 function moveDown(h)
-    for i = h-1, 0, -1 do
+    for i = h - 1, 0, -1 do
         grid[i + 1] = copyTable(grid[i])
     end
-    for i = 0, gridWidth-1 do
+    for i = 0, gridWidth - 1 do
         grid[0][i] = 0
     end
 
