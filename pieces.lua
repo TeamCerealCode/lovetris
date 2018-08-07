@@ -1,9 +1,9 @@
 local Piece = require 'piece'
 
-local OBlock = class('OBlock',Piece)
+local OBlock = class('OBlock', Piece)
 
 function OBlock:initialize(x,y)
-    Piece.initialize(self,x,y,4,2)
+    Piece.initialize(self, x, y, 4, 2)
     self.grid[0] = {1, 1}
     self.grid[1] = {1, 1}
 end
