@@ -40,19 +40,19 @@ local tickt = 0
 _G.fallSpd = 0.1
 
 _G.colors = {
-    {0.059, 0.608, 0.843},
-    {0.129, 0.255, 0.776},
-    {0.890, 0.357, 0.008},
-    {0.890, 0.624, 0.008},
-    {0.349, 0.694, 0.004},
-    {0.843, 0.059, 0.216},
-    {0.686, 0.161, 0.541},
-    {0.784, 0.784, 0.784}
+    {0.059, 0.608, 0.843}, -- IPiece
+    {0.129, 0.255, 0.776}, -- JPiece
+    {0.890, 0.357, 0.008}, -- LPiece
+    {0.890, 0.624, 0.008}, -- OPiece
+    {0.349, 0.694, 0.004}, -- SPiece
+    {0.843, 0.059, 0.216}, -- ZPiece
+    {0.686, 0.161, 0.541}, -- TPiece
+    {0.784, 0.784, 0.784}  -- Garbage blocks
 }
 
-local OBlock = require 'pieces'
+require 'pieces'
 
-local currentBlock = OBlock(4, 0)
+local currentBlock = TPiece(4, 0)
 
 function love.load()
 end
@@ -102,7 +102,7 @@ function love.update(dt)
     if tickt > fallSpd then
         tickt = 0
         if not currentBlock:update() then
-            currentBlock = OBlock(3, 0)
+            currentBlock = OPiece(4, 0)
         end
         clearLines()
     end
@@ -124,7 +124,7 @@ function love.keypressed(key)
     end
     -- reset key
     if key == "r" then
-        currentBlock = OBlock(3, 0)
+        currentBlock = OPiece(4, 0)
         grid = {}
         for i = 0, gridHeight - 1 do
             row = {}
