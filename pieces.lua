@@ -3,12 +3,9 @@ local Piece = require 'piece'
 local OBlock = class('OBlock',Piece)
 
 function OBlock:initialize(x,y)
-    Piece.initialize(self,x,y,4,3)
-end
-
-function OBlock:draw()
-    love.graphics.setColor(0.93, 0.95, 0.25)
-    love.graphics.rectangle('fill', self.x * tileSize + gridStartX, self.y * tileSize + gridStartY, tileSize * 2, tileSize * 2)
+    Piece.initialize(self,x,y,4,2)
+    self.grid[0] = {1, 1}
+    self.grid[1] = {1, 1}
 end
 
 function OBlock:update()
@@ -24,13 +21,6 @@ function OBlock:update()
 
     self.y = self.y + 1
     return true
-end
-
-function OBlock:toGrid()
-    grid[self.y][self.x] = 4
-    grid[self.y+1][self.x] = 4
-    grid[self.y+1][self.x+1] = 4
-    grid[self.y][self.x+1] = 4
 end
 
 function OBlock:move()

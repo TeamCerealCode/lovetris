@@ -37,6 +37,17 @@ end
 local tickt = 0
 _G.fallSpd = 0.1
 
+_G.colors = {
+    {0.059, 0.608, 0.843},
+    {0.129, 0.255, 0.776},
+    {0.890, 0.357, 0.008},
+    {0.890, 0.624, 0.008},
+    {0.349, 0.694, 0.004},
+    {0.843, 0.059, 0.216},
+    {0.686, 0.161, 0.541},
+    {0.784, 0.784, 0.784}
+}
+
 local OBlock = require 'pieces'
 
 local currentBlock = OBlock(4,0)
@@ -72,7 +83,7 @@ function love.draw()
     for i = 0, gridHeight-1 do
         for j = 0, gridWidth-1 do
             if grid[i][j] ~= 0 then
-                if grid[i][j] == 4 then love.graphics.setColor(0.93, 0.95, 0.25) end
+                love.graphics.setColor(unpack(colors[grid[i][j]]))
                 love.graphics.rectangle('fill', j * tileSize + gridStartX, i * tileSize + gridStartY, tileSize, tileSize)
             end
         end
