@@ -16,7 +16,7 @@ function Piece:initialize(x, y, type, size)
 end
 
 function Piece:draw()
-    love.graphics.setColor(unpack(colors[self.type]))
+    love.graphics.setColor(colors[self.type])
     for i = 0, self.size-1 do
         for j = 0, self.size-1 do
             love.graphics.rectangle('fill', (self.x + i) * tileSize + gridStartX, (self.y + j) * tileSize + gridStartY, tileSize, tileSize)

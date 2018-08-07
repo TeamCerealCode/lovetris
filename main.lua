@@ -74,7 +74,7 @@ function love.draw()
     for i = 0, gridHeight - 1 do
         for j = 0, gridWidth - 1 do
             if grid[i][j] ~= 0 then
-                love.graphics.setColor(unpack(colors[grid[i][j]]))
+                love.graphics.setColor(colors[grid[i][j]])
                 love.graphics.rectangle('fill', j * tileSize + gridStartX, i * tileSize + gridStartY, tileSize, tileSize)
             end
         end
