@@ -11,6 +11,7 @@ local windowCenterY = height / 2
 
 local rainbowMode = false
 local rainbowModeTimer = 0
+local rainbowModeColor
 
 
 _G.tileSize = 20
@@ -53,17 +54,6 @@ local OBlock = require 'pieces'
 
 local currentBlock = OBlock(4, 0)
 
-function rainbowModeCheck()
-    if rainbowMode then
-        if     math.floor(rainbowModeTimer) % 320 < 80 then love.graphics.setColor(0.5, 0, 0.5)
-        elseif math.floor(rainbowModeTimer) % 320 < 160 then love.graphics.setColor(1, 0.5, 0)
-        elseif math.floor(rainbowModeTimer) % 320 < 240 then love.graphics.setColor(0.5, 1, 0.5)
-        elseif math.floor(rainbowModeTimer) % 320 < 320 then love.graphics.setColor(0, 0.5, 1)
-        end
-    end
-    rainbowModeTimer = rainbowModeTimer + 0.1
-end
-
 function love.load()
 end
 
@@ -92,26 +82,17 @@ function love.draw()
 
     -- debug menu. use if you want to test something instead of littering code !!!!
     if displayDebug then
-        love.graphics.setColor(1, 1, 1, 0.9) 
-        rainbowModeCheck()
+        if rainbowMode and rainbowModeColor then love.graphics.setColor(rainbowModeColor)
+        else love.graphics.setColor(1, 1, 1, 0.9) end
         love.graphics.print('render options:')
-        rainbowModeCheck()
-        love.graphics.print('gridy size: '..gridHeight, 0, 15) 
-        rainbowModeCheck()
-        love.graphics.print('gridx size: '..gridWidth, 0, 30) 
-        rainbowModeCheck()
+        love.graphics.print('gridy size: '..gridHeight, 0, 15)
+        love.graphics.print('gridx size: '..gridWidth, 0, 30)
         love.graphics.print('tile size: '..tileSize, 0, 45)
-        rainbowModeCheck()
-        love.graphics.print('misc variables and such:', 0, 60) 
-        rainbowModeCheck()
-        love.graphics.print('width: '..width, 0, 75) 
-        rainbowModeCheck()
-        love.graphics.print('height: '..height, 0, 90) 
-        rainbowModeCheck()
-        love.graphics.print('block x: '..currentBlock.x, 0, 105) 
-        rainbowModeCheck()
-        love.graphics.print('block y: '..currentBlock.y, 0, 120) 
-        rainbowModeCheck()
+        love.graphics.print('misc variables and such:', 0, 60)
+        love.graphics.print('width: '..width, 0, 75)
+        love.graphics.print('height: '..height, 0, 90)
+        love.graphics.print('block x: '..currentBlock.x, 0, 105)
+        love.graphics.print('block y: '..currentBlock.y, 0, 120)
         love.graphics.print('press r to reset', 0, 135)
     end
 end
@@ -124,6 +105,11 @@ function love.update(dt)
             currentBlock = OBlock(3, 0)
         end
         clearLines()
+    end
+
+    if rainbowMode then
+        rainbowModeTimer = (rainbowModeTimer + dt) % 1
+        rainbowModeColor = {utils.hslToRgb(rainbowModeTimer, .5, .5, 1)}
     end
 end
 
