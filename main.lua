@@ -143,7 +143,7 @@ function clearLines()
     for i = 0, gridHeight - 1 do
         row = grid[i]
         complete = true
-        for k,v in pairs(row) do
+        for k, v in pairs(row) do
             if v == 0 then
                 complete = false
                 break
