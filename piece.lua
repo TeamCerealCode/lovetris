@@ -56,7 +56,7 @@ function Piece:move()
                 if row[x] ~= 0 then
                     if grid[self.y + y][self.x + x + inc] == 0 then
                         break
-                    else 
+                    else
                         return
                     end
                 end
@@ -84,7 +84,7 @@ function Piece:toGrid()
     for i = 1, self.size do
         for j = 1, self.size do
             if grid[j][i] ~= 0 then
-                grid[self.y + j][self.x + i] = self.type  
+                grid[self.y + j][self.x + i] = self.type
             end
         end
     end

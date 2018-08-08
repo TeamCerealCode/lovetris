@@ -151,7 +151,7 @@ end
 function clearLines()
     for i = 0, gridHeight - 1 do
         row = grid[i]
-        complete = true 
+        complete = true
         for k,v in pairs(row) do
             if v == 0 then
                 complete = false
@@ -174,12 +174,12 @@ function moveDown(h)
 
 end
 
-function love.resize(w, h) 
+function love.resize(w, h)
     tileSize = (width + height) / 70
-    width = w 
-    height = h 
-    windowCenterX = width / 2 
-    windowCenterY = height / 2 
+    width = w
+    height = h
+    windowCenterX = width / 2
+    windowCenterY = height / 2
     gridStartX = windowCenterX - tileSize * gridWidth / 2
     gridStartY = windowCenterY - tileSize * gridHeight / 2
 end
