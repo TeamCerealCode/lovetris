@@ -78,16 +78,16 @@ function love.draw()
     if displayDebug then
         if rainbowMode and rainbowModeColor then love.graphics.setColor(rainbowModeColor)
         else love.graphics.setColor(1, 1, 1, 0.9) end
-        love.graphics.print('render options:')
-        love.graphics.print('gridy size: '..gridHeight, 0, 15)
-        love.graphics.print('gridx size: '..gridWidth, 0, 30)
-        love.graphics.print('tile size: '..tileSize, 0, 45)
-        love.graphics.print('misc variables and such:', 0, 60)
-        love.graphics.print('width: '..width, 0, 75)
-        love.graphics.print('height: '..height, 0, 90)
-        love.graphics.print('block x: '..currentBlock.x, 0, 105)
-        love.graphics.print('block y: '..currentBlock.y, 0, 120)
-        love.graphics.print('press r to reset', 0, 135)
+        love.graphics.print('render options:'..'\n'..
+            'gridy size: '..gridHeight..'\n'..
+            'gridx size: '..gridWidth..'\n'..
+            'tile size: '..tileSize..'\n'..
+            'misc variables and such:'..'\n'..
+            'width: '..width..'\n'..
+            'height: '..height..'\n'..
+            'block x: '..currentBlock.x..'\n'..
+            'block y: '..currentBlock.y..'\n'..
+            'press r to reset')
     end
 end
 
