@@ -51,9 +51,8 @@ function Piece:move()
 
     if love.keyboard.isDown('left') or love.keyboard.isDown('right') then
         for y = 1, self.size do
-            row = self.grid[y]
             for x = startX, endX, inc * -1 do
-                if row[x] ~= 0 then
+                if self.grid[y][x] ~= 0 then
                     if grid[self.y + y][self.x + x + inc] == 0 then
                         break
                     else
@@ -69,9 +68,8 @@ end
 function Piece:collide(yOff)
     yOff = yOff or self.y
     for y = 1, self.size do
-        row = self.grid[y]
         for x = 1, self.size do
-            if row[x] ~= 0 then
+            if self.grid[y][x] ~= 0 then
                 if yOff + y + 1 >= gridHeight or grid[yOff + y + 1][self.x + x] ~= 0 then
                     return true
                 end
