@@ -2,7 +2,6 @@ _G.utils = require 'utils'
 _G.class = require 'libs.middleclass'
 _G.inspect = require 'libs.inspect'
 
--- variables n stuff
 local width = love.graphics.getWidth()
 local height = love.graphics.getHeight()
 
@@ -23,7 +22,6 @@ _G.gridHeight = 20
 _G.gridStartX = windowCenterX - tileSize * gridWidth / 2
 _G.gridStartY = windowCenterY - tileSize * gridHeight / 2
 
--- make the grid variable
 _G.grid = {}
 for i = 0, gridHeight - 1 do
     row = {}
@@ -77,7 +75,6 @@ function love.draw()
         end
     end
 
-    -- debug menu. use if you want to test something instead of littering code !!!!
     if displayDebug then
         if rainbowMode and rainbowModeColor then love.graphics.setColor(rainbowModeColor)
         else love.graphics.setColor(1, 1, 1, 0.9) end
@@ -111,11 +108,9 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
-    -- debug menu
     if key == 'f3' then
         displayDebug = not displayDebug
     end
-    -- down
     if key == 'down' then
         fallSpd = fallSpd / 2
     end
