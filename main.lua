@@ -23,10 +23,6 @@ _G.gridHeight = 20
 _G.gridStartX = windowCenterX - tileSize * gridWidth / 2
 _G.gridStartY = windowCenterY - tileSize * gridHeight / 2
 
--- grid made the size of the window (dont actually use in final code, just a little fun script)
--- gridHeight = math.floor(height/tileSize)
--- gridWidth = math.floor(width/tileSize)
-
 -- make the grid variable
 _G.grid = {}
 for i = 0, gridHeight - 1 do
