@@ -1,5 +1,6 @@
 _G.utils = require 'utils'
 _G.class = require 'libs.middleclass'
+_G.inspect = require 'libs.inspect'
 
 -- variables n stuff
 local width = love.graphics.getWidth()
