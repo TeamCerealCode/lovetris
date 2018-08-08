@@ -17,10 +17,12 @@ end
 
 function Piece:draw()
     love.graphics.setColor(colors[self.type])
-    for i = 1, self.size do
-        for j = 1, self.size do
+    for j = 1, self.size do
+        y = j - 1
+        for i = 1, self.size do
+            x = i - 1
             if self.grid[j][i] ~= 0 then
-                love.graphics.rectangle('fill', (self.x + i) * tileSize + gridStartX, (self.y + j) * tileSize + gridStartY, tileSize, tileSize)
+                love.graphics.rectangle('fill', (self.x + x) * tileSize + gridStartX, (self.y + y) * tileSize + gridStartY, tileSize, tileSize)
             end
         end
     end
@@ -46,13 +48,15 @@ function Piece:move()
         reverse = true
         inc = 1
         startX = self.size
-        endX = 0
+        endX = 1
     end
 
     if love.keyboard.isDown('left') or love.keyboard.isDown('right') then
-        for y = 1, self.size do
-            for x = startX, endX, inc * -1 do
-                if self.grid[y][x] ~= 0 then
+        for j = 1, self.size do
+            y = j - 1
+            for i = startX, endX, inc * -1 do
+                x = i - 1
+                if self.grid[j][i] ~= 0 then
                     if grid[self.y + y][self.x + x + inc] == 0 then
                         break
                     else
@@ -67,9 +71,11 @@ end
 
 function Piece:collide(yOff)
     yOff = yOff or self.y
-    for y = 1, self.size do
-        for x = 1, self.size do
-            if self.grid[y][x] ~= 0 then
+    for j = 1, self.size do
+        y = j - 1
+        for i = 1, self.size do
+            x = i - 1
+            if self.grid[j][i] ~= 0 then
                 if yOff + y + 1 >= gridHeight or grid[yOff + y + 1][self.x + x] ~= 0 then
                     return true
                 end
@@ -81,8 +87,8 @@ end
 function Piece:toGrid()
     for i = 1, self.size do
         for j = 1, self.size do
-            if grid[j][i] ~= 0 then
-                grid[self.y + j][self.x + i] = self.type
+            if self.grid[j][i] ~= 0 then
+                grid[self.y + j - 1][self.x + i - 1] = self.type
             end
         end
     end
