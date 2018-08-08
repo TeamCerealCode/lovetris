@@ -31,8 +31,8 @@ for i = 0, gridHeight - 1 do
     grid[i] = row
 end
 
-local tickt = 0
-_G.fallSpd = 0.1
+local fallTimer = 0
+local fallSpeed = 0.1
 
 _G.colors = {
     {0.059, 0.608, 0.843}, -- IPiece
@@ -92,9 +92,9 @@ function love.draw()
 end
 
 function love.update(dt)
-    tickt = tickt + dt
-    if tickt > fallSpd then
-        tickt = 0
+    fallTimer = fallTimer + dt
+    if fallTimer > fallSpeed then
+        fallTimer = 0
         if not currentBlock:update() then
             currentBlock = OPiece(4, 0)
         end
@@ -112,7 +112,7 @@ function love.keypressed(key)
         displayDebug = not displayDebug
     end
     if key == 'down' then
-        fallSpd = fallSpd / 2
+        fallSpeed = fallSpeed / 2
     end
     -- reset key
     if key == "r" then
@@ -134,7 +134,7 @@ end
 
 function love.keyreleased(key)
     if key == 'down' then
-        fallSpd = fallSpd * 2
+        fallSpeed = fallSpeed * 2
     end
 end
 
