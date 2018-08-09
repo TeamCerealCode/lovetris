@@ -49,7 +49,14 @@ _G.colors = {
 
 require 'pieces'
 
-local currentBlock = TPiece(4, 0)
+local currentBlock = nil
+
+function newPiece()
+    -- currently only a tpiece for testing
+    currentBlock = TPiece(4, 0)
+end
+
+newPiece()
 
 function love.load()
 end
@@ -98,7 +105,7 @@ function love.update(dt)
     if fallTimer > fallSpeed then
         fallTimer = 0
         if not currentBlock:update() then
-            currentBlock = OPiece(4, 0)
+            newPiece()
         end
         clearLines()
     end
@@ -124,7 +131,7 @@ function love.keypressed(key)
     end
     -- reset key
     if key == "r" then
-        currentBlock = OPiece(4, 0)
+        newPiece()
         grid = {}
         for i = 0, gridHeight - 1 do
             row = {}
