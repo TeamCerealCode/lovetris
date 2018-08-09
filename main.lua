@@ -31,6 +31,8 @@ for i = 0, gridHeight - 1 do
     grid[i] = row
 end
 
+_G.upArrow = false
+
 local fallTimer = 0
 local fallSpeed = 0.1
 
@@ -116,6 +118,9 @@ function love.keypressed(key)
     end
     if key == 'x' then
         currentBlock:rotate()
+    end
+    if key == 'up' then
+        upArrow = true
     end
     -- reset key
     if key == "r" then

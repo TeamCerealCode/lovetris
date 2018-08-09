@@ -30,6 +30,11 @@ end
 
 function Piece:update()
     self:move()
+    if upArrow then
+        upArrow = false
+        self:hardDrop()
+        return false
+    end
     if self:collide() then
         self:toGrid()
         return false
@@ -103,6 +108,16 @@ function Piece:rotate()
 
     self.grid = newGrid
     return true
+end
+
+function Piece:hardDrop()
+    for y = self.y, gridHeight do
+        if self:collide(y) then
+            self.y = y
+            self:toGrid()
+            return true
+        end
+    end
 end
 
 function Piece:toGrid()
