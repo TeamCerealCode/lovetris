@@ -114,6 +114,9 @@ function love.keypressed(key)
     if key == 'down' then
         fallSpeed = fallSpeed / 2
     end
+    if key == 'x' then
+        currentBlock:rotate()
+    end
     -- reset key
     if key == "r" then
         currentBlock = OPiece(4, 0)

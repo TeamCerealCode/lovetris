@@ -84,6 +84,27 @@ function Piece:collide(yOff)
     end
 end
 
+function Piece:rotate()
+    newGrid = {}
+    for i = 1, self.size do
+        row = {}
+        for j = 1, self.size do
+            row[j] = 0
+        end
+        newGrid[i] = row
+    end
+
+    -- rotating clock wise
+    for j = 1, self.size do
+        for i = 1, self.size do
+            newGrid[i][self.size - j + 1] = self.grid[j][i]
+        end
+    end
+
+    self.grid = newGrid
+    return true
+end
+
 function Piece:toGrid()
     for i = 1, self.size do
         for j = 1, self.size do
