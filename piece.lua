@@ -117,6 +117,7 @@ function Piece:hardDrop()
         if self:collide(y) then
             self.y = y
             self:toGrid()
+            return true
         end
     end
 end
