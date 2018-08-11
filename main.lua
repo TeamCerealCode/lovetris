@@ -22,14 +22,7 @@ _G.gridHeight = 20
 _G.gridStartX = windowCenterX - tileSize * gridWidth / 2
 _G.gridStartY = windowCenterY - tileSize * gridHeight / 2
 
-_G.grid = {}
-for i = 0, gridHeight - 1 do
-    row = {}
-    for j = 0, gridWidth - 1 do
-        row[j] = 0
-    end
-    grid[i] = row
-end
+_G.grid = nil
 
 _G.hardDrop = false
 
@@ -42,23 +35,64 @@ _G.colors = {
     {0.890, 0.357, 0.008}, -- LPiece
     {0.890, 0.624, 0.008}, -- OPiece
     {0.349, 0.694, 0.004}, -- SPiece
-    {0.686, 0.161, 0.541}, -- TPiece
     {0.843, 0.059, 0.216}, -- ZPiece
+    {0.686, 0.161, 0.541}, -- TPiece
     {0.784, 0.784, 0.784}  -- Garbage blocks
 }
 
 require 'pieces'
 
 local currentPiece = nil
+local bag = {}
+local upcoming = {}
+local hold = 0
 
-function newPiece()
-    -- currently only a tpiece for testing
-    currentPiece = IPiece(4, 0)
+function newBag()
+    local pieces = {1,2,3,4,5,6,7}
+    bag = utils.shuffle(pieces)
 end
 
-newPiece()
+function newUpcoming()
+    table.insert(upcoming,table.remove(bag,1))
+    if #bag == 0 then
+        newBag()
+    end
+end
+
+function getUpcoming()
+    newUpcoming()
+    return table.remove(upcoming,1)
+end
+
+function newPiece(hld)
+    local piece = nil
+    if hld then
+        if hold == 0 then
+            piece = getPiece(getUpcoming())
+        else
+            piece = getPiece(hold)
+        end
+    else
+        piece = getPiece(getUpcoming())
+    end
+    currentPiece = piece(4, 0)
+end
 
 function love.load()
+    grid = {}
+    for i = 0, gridHeight - 1 do
+        row = {}
+        for j = 0, gridWidth - 1 do
+            row[j] = 0
+        end
+        grid[i] = row
+    end
+
+    newBag()
+    for i = 1, 5 do
+        newUpcoming()
+    end
+    newPiece()
 end
 
 function love.draw()
@@ -128,16 +162,12 @@ function love.keypressed(key)
         currentPiece:rotate("cw")
     elseif key == 'up' then
         hardDrop = true
+    elseif key == 'space' then
+        local t = currentPiece.type
+        newPiece(true)
+        hold = t
     elseif key == 'r' then
-        newPiece()
-        grid = {}
-        for i = 0, gridHeight - 1 do
-            row = {}
-            for j = 0, gridWidth - 1 do
-                row[j] = 0
-            end
-            grid[i] = row
-        end
+        love.load()
     elseif key == 'f' and love.keyboard.isDown('f3') then
         rainbowMode = not rainbowMode
     end
