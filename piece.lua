@@ -30,8 +30,8 @@ end
 
 function Piece:update()
     self:move()
-    if upArrow then
-        upArrow = false
+    if hardDrop then
+        hardDrop = false
         self:hardDrop()
         return false
     end
@@ -107,7 +107,6 @@ function Piece:rotate()
     end
 
     self.grid = newGrid
-    return true
 end
 
 function Piece:hardDrop()
@@ -115,7 +114,6 @@ function Piece:hardDrop()
         if self:collide(y) then
             self.y = y
             self:toGrid()
-            return true
         end
     end
 end

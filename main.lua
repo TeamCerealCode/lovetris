@@ -31,7 +31,7 @@ for i = 0, gridHeight - 1 do
     grid[i] = row
 end
 
-_G.upArrow = false
+_G.hardDrop = false
 
 local fallTimer = 0
 local fallSpeed = 0.1
@@ -49,11 +49,11 @@ _G.colors = {
 
 require 'pieces'
 
-local currentBlock = nil
+local currentPiece = nil
 
 function newPiece()
     -- currently only a tpiece for testing
-    currentBlock = TPiece(4, 0)
+    currentPiece = TPiece(4, 0)
 end
 
 newPiece()
@@ -71,7 +71,7 @@ function love.draw()
         love.graphics.line(windowCenterX - tileSize * gridWidth / 2, windowCenterY - tileSize * gridHeight / 2 + i, windowCenterX + tileSize * gridWidth / 2, windowCenterY - tileSize * gridHeight / 2 + i)
     end
 
-    currentBlock:draw()
+    currentPiece:draw()
 
     -- drawing the grid
     love.graphics.setColor(1, 1, 1)
@@ -94,8 +94,8 @@ function love.draw()
             'misc variables and such:'..'\n'..
             'width: '..width..'\n'..
             'height: '..height..'\n'..
-            'block x: '..currentBlock.x..'\n'..
-            'block y: '..currentBlock.y..'\n'..
+            'block x: '..currentPiece.x..'\n'..
+            'block y: '..currentPiece.y..'\n'..
             'press r to reset')
     end
 end
@@ -104,7 +104,7 @@ function love.update(dt)
     fallTimer = fallTimer + dt
     if fallTimer > fallSpeed then
         fallTimer = 0
-        if not currentBlock:update() then
+        if not currentPiece:update() then
             newPiece()
         end
         clearLines()
@@ -124,10 +124,10 @@ function love.keypressed(key)
         fallSpeed = fallSpeed / 2
     end
     if key == 'x' then
-        currentBlock:rotate()
+        currentPiece:rotate()
     end
     if key == 'up' then
-        upArrow = true
+        hardDrop = true
     end
     -- reset key
     if key == 'r' then
