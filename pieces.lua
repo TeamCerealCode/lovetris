@@ -8,6 +8,7 @@ _G.SPiece = class('SPiece', Piece)
 _G.ZPiece = class('ZPiece', Piece)
 _G.TPiece = class('TPiece', Piece)
 
+<<<<<<< HEAD
 function IPiece:initialize(x,y)
     Piece.initialize(self, x, y, 1, 4)
     self.grid[1] = {0, 0, 0, 0}
@@ -34,11 +35,27 @@ function LPiece:initialize(x,y)
 end
 
 function OPiece:initialize(x,y)
-    Piece.initialize(self, x, y, 4, 2)
-    self.grid[1] = {1, 1}
-    self.grid[2] = {1, 1}
+=======
+function IPiece:initialize(x, y)
+    Piece.initialize(self, x, y, 1, 4)
+    self.grid = {
+        {0, 0, 0, 0},
+        {1, 1, 1, 1},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0},
+    }
 end
 
+function OPiece:initialize(x, y)
+>>>>>>> 6ae9113e2cc4332619bf67ca584e630ac9e6e05d
+    Piece.initialize(self, x, y, 4, 2)
+    self.grid = {
+        {1, 1},
+        {1, 1},
+    }
+end
+
+<<<<<<< HEAD
 function SPiece:initialize(x,y)
     Piece.initialize(self, x, y, 5, 3)
     self.grid[1] = {0, 1, 1}
@@ -58,4 +75,13 @@ function TPiece:initialize(x,y)
     self.grid[1] = {0, 1, 0}
     self.grid[2] = {1, 1, 1}
     self.grid[3] = {0, 0, 0}
+=======
+function TPiece:initialize(x, y)
+    Piece.initialize(self, x, y, 6, 3)
+    self.grid = {
+        {0, 1, 0},
+        {1, 1, 1},
+        {0, 0, 0},
+    }
+>>>>>>> 6ae9113e2cc4332619bf67ca584e630ac9e6e05d
 end

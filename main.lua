@@ -42,8 +42,8 @@ _G.colors = {
     {0.890, 0.357, 0.008}, -- LPiece
     {0.890, 0.624, 0.008}, -- OPiece
     {0.349, 0.694, 0.004}, -- SPiece
-    {0.843, 0.059, 0.216}, -- ZPiece
     {0.686, 0.161, 0.541}, -- TPiece
+    {0.843, 0.059, 0.216}, -- ZPiece
     {0.784, 0.784, 0.784}  -- Garbage blocks
 }
 
@@ -120,21 +120,15 @@ end
 function love.keypressed(key)
     if key == 'f3' then
         displayDebug = not displayDebug
-    end
-    if key == 'down' then
+    elseif key == 'down' then
         fallSpeed = fallSpeed / 2
-    end
-    if key == 'z' then
+    elseif key == 'z' then
         currentPiece:rotate("ccw")
-    end
-    if key == 'x' then
+    elseif key == 'x' then
         currentPiece:rotate("cw")
-    end
-    if key == 'up' then
+    elseif key == 'up' then
         hardDrop = true
-    end
-    -- reset key
-    if key == 'r' then
+    elseif key == 'r' then
         newPiece()
         grid = {}
         for i = 0, gridHeight - 1 do
@@ -144,9 +138,7 @@ function love.keypressed(key)
             end
             grid[i] = row
         end
-    end
-
-    if key == 'f' and love.keyboard.isDown('f3') then
+    elseif key == 'f' and love.keyboard.isDown('f3') then
         rainbowMode = not rainbowMode
     end
 end

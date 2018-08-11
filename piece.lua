@@ -104,7 +104,9 @@ function Piece:collide(yOffset)
 end
 
 function Piece:rotate(direction)
+    oldGrid = utils.copyTable(self.grid)
     newGrid = {}
+
     for i = 1, self.size do
         row = {}
         for j = 1, self.size do
@@ -125,6 +127,10 @@ function Piece:rotate(direction)
 
     self.grid = newGrid
     self.slideTimer = 0;
+    
+    if self:collide() then
+        self.grid = oldGrid
+    end
 end
 
 function Piece:hardDrop()
