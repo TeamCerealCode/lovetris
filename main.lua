@@ -130,7 +130,7 @@ function love.keypressed(key)
         upArrow = true
     end
     -- reset key
-    if key == "r" then
+    if key == 'r' then
         newPiece()
         grid = {}
         for i = 0, gridHeight - 1 do
