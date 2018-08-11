@@ -13,6 +13,9 @@ function Piece:initialize(x, y, type, size)
         end
         self.grid[i] = row
     end
+
+    self.slideTimer = 0
+    self.fall = true
 end
 
 function Piece:draw()
@@ -28,19 +31,29 @@ function Piece:draw()
     end
 end
 
-function Piece:update()
+function Piece:update(dt)
     self:move()
     if hardDrop then
         hardDrop = false
         self:hardDrop()
         return false
     end
+
     if self:collide() then
+        self.slideTimer = self.slideTimer + dt * 1000
+        self.fall = false
+    else
+        self.fall = not (self.slideTimer > 0)
+    end
+        
+    if self.slideTimer > 60 then
         self:toGrid()
         return false
     end
 
-    self.y = self.y + 1
+    if self.fall then
+        self.y = self.y + 1
+    end
     return true
 end
 
@@ -71,6 +84,7 @@ function Piece:move()
             end
         end
         self.x = self.x + inc
+        self.slideTimer = 0
     end
 end
 
@@ -110,6 +124,7 @@ function Piece:rotate(direction)
     end
 
     self.grid = newGrid
+    self.slideTimer = 0;
 end
 
 function Piece:hardDrop()

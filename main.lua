@@ -53,7 +53,7 @@ local currentPiece = nil
 
 function newPiece()
     -- currently only a tpiece for testing
-    currentPiece = TPiece(4, 0)
+    currentPiece = IPiece(4, 0)
 end
 
 newPiece()
@@ -96,6 +96,7 @@ function love.draw()
             'height: '..height..'\n'..
             'block x: '..currentPiece.x..'\n'..
             'block y: '..currentPiece.y..'\n'..
+            'block slide: '..currentPiece.slideTimer..'\n'..
             'press r to reset')
     end
 end
@@ -104,7 +105,7 @@ function love.update(dt)
     fallTimer = fallTimer + dt
     if fallTimer > fallSpeed then
         fallTimer = 0
-        if not currentPiece:update() then
+        if not currentPiece:update(dt) then
             newPiece()
         end
         clearLines()
