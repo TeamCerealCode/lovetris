@@ -103,7 +103,6 @@ end
 function love.draw()
     -- grid draw
     love.graphics.setColor(1, 1, 1, 0.5)
-    --love.graphics.setLineWidth(1)
     love.graphics.setLineStyle("rough")
     for n = 0, tileSize * gridWidth, tileSize do
         love.graphics.line(windowCenterX - tileSize * gridWidth / 2 + n, windowCenterY - tileSize * gridHeight / 2, windowCenterX - tileSize * gridWidth / 2 + n, windowCenterY + tileSize * gridHeight / 2)
