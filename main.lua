@@ -123,8 +123,11 @@ function love.keypressed(key)
     if key == 'down' then
         fallSpeed = fallSpeed / 2
     end
+    if key == 'z' then
+        currentPiece:rotate("ccw")
+    end
     if key == 'x' then
-        currentPiece:rotate()
+        currentPiece:rotate("cw")
     end
     if key == 'up' then
         hardDrop = true

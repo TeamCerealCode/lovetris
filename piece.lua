@@ -74,14 +74,14 @@ function Piece:move()
     end
 end
 
-function Piece:collide(yOff)
-    yOff = yOff or self.y
+function Piece:collide(yOffset)
+    yOffset = yOffset or self.y
     for j = 1, self.size do
         y = j - 1
         for i = 1, self.size do
             x = i - 1
             if self.grid[j][i] ~= 0 then
-                if yOff + y + 1 >= gridHeight or grid[yOff + y + 1][self.x + x] ~= 0 then
+                if yOffset + y + 1 >= gridHeight or grid[yOffset + y + 1][self.x + x] ~= 0 then
                     return true
                 end
             end
@@ -89,7 +89,7 @@ function Piece:collide(yOff)
     end
 end
 
-function Piece:rotate()
+function Piece:rotate(direction)
     newGrid = {}
     for i = 1, self.size do
         row = {}
@@ -99,10 +99,13 @@ function Piece:rotate()
         newGrid[i] = row
     end
 
-    -- rotating clock wise
     for j = 1, self.size do
         for i = 1, self.size do
-            newGrid[i][self.size - j + 1] = self.grid[j][i]
+            if direction == "cw" then
+                newGrid[i][self.size - j + 1] = self.grid[j][i]
+            elseif direction == "ccw" then
+                newGrid[self.size - i + 1][j] = self.grid[j][i]
+            end
         end
     end
 
