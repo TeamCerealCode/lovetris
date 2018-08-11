@@ -78,6 +78,7 @@ function newPiece(hld)
     currentPiece = piece(4, 0)
 end
 
+math.randomseed(os.time())
 function love.load()
     grid = {}
     for i = 0, gridHeight - 1 do
@@ -88,6 +89,10 @@ function love.load()
         grid[i] = row
     end
 
+
+    bag = {}
+    upcoming = {}
+    hold = 0
     newBag()
     for i = 1, 5 do
         newUpcoming()
@@ -97,7 +102,9 @@ end
 
 function love.draw()
     -- grid draw
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.setColor(1, 1, 1, 0.5)
+    --love.graphics.setLineWidth(1)
+    love.graphics.setLineStyle("rough")
     for n = 0, tileSize * gridWidth, tileSize do
         love.graphics.line(windowCenterX - tileSize * gridWidth / 2 + n, windowCenterY - tileSize * gridHeight / 2, windowCenterX - tileSize * gridWidth / 2 + n, windowCenterY + tileSize * gridHeight / 2)
     end
@@ -108,7 +115,7 @@ function love.draw()
     currentPiece:draw()
 
     -- drawing the grid
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.setColor(1, 1, 1, 1)
     for i = 0, gridHeight - 1 do
         for j = 0, gridWidth - 1 do
             if grid[i][j] ~= 0 then
@@ -116,6 +123,24 @@ function love.draw()
                 love.graphics.rectangle('fill', j * tileSize + gridStartX, i * tileSize + gridStartY, tileSize, tileSize)
             end
         end
+    end
+
+    -- drawing the upcoming pieces
+    local y = gridStartY
+    for i = 1, #upcoming do
+        local cur = getPiece(upcoming[i])
+        cur = cur(0,0)
+        cur:draw(true, gridStartX + (gridWidth * tileSize) + tileSize, y)
+        local s = cur.size
+        if s <= 2 then s = 3 end
+        y = y + s * tileSize
+    end
+
+    -- drawing the currently held piece
+    if hold ~= 0 then
+        local holdP = getPiece(hold)
+        holdP = holdP(0,0)
+        holdP:draw(true, gridStartX - ((holdP.size + 2) * tileSize), gridStartY)
     end
 
     if displayDebug then
