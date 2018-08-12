@@ -29,6 +29,12 @@ _G.hardDrop = false
 local fallTimer = 0
 local fallSpeed = 0.1
 
+local arr = 0
+local arrTimer = 0
+local das = 133
+local dasTimer = 0 
+local dasMode = false
+
 require 'pieces'
 
 local currentPiece = nil
@@ -150,6 +156,28 @@ function love.draw()
 end
 
 function love.update(dt)
+    if love.keyboard.isDown('right') or love.keyboard.isDown('left') then
+        if dasMode == false then
+            dasTimer = dasTimer + dt
+            if dasTimer * 1000 > das then
+                dasMode = true
+            end
+        else
+            arrTimer = arrTimer + dt
+            if arrTimer * 1000 > arr then
+                if love.keyboard.isDown('right') then
+                    currentPiece:move('right')
+                elseif love.keyboard.isDown('left') then
+                    currentPiece:move('left')
+                end
+                arrTimer = 0
+            end
+        end
+    else
+        dasTimer = 0
+        dasMode = false
+    end
+
     fallTimer = fallTimer + dt
     if fallTimer > fallSpeed then
         fallTimer = 0
