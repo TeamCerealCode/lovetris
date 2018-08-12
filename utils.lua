@@ -34,4 +34,14 @@ function utils.hslToRgb(h, s, l, a)
     return r, g, b, a
 end
 
+
+function utils.shuffle(arr)
+    local size = #arr
+    for i = size, 1, -1 do
+        local rand = math.random(size)
+        arr[i], arr[rand] = arr[rand], arr[i]
+    end
+    return arr
+end
+
 return utils

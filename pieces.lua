@@ -64,6 +64,24 @@ _G.SPiece = class('SPiece', Piece)
 _G.ZPiece = class('ZPiece', Piece)
 _G.TPiece = class('TPiece', Piece)
 
+function _G.getPiece(t)
+    if t == 1 then
+        return IPiece
+    elseif t == 2 then
+        return JPiece
+    elseif t == 3 then
+        return LPiece
+    elseif t == 4 then
+        return OPiece
+    elseif t == 5 then
+        return SPiece
+    elseif t == 6 then
+        return ZPiece
+    elseif t == 7 then
+        return TPiece
+    end
+end
+
 
 function IPiece:initialize(x, y)
     Piece.initialize(self, x, y, 1, 4)
@@ -120,7 +138,7 @@ function ZPiece:initialize(x,y)
 end
 
 function TPiece:initialize(x, y)
-    Piece.initialize(self, x, y, 6, 3)
+    Piece.initialize(self, x, y, 7, 3)
     self.grid = {
         {0, 1, 0},
         {1, 1, 1},

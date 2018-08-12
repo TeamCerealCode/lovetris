@@ -22,14 +22,7 @@ _G.gridHeight = 20
 _G.gridStartX = windowCenterX - tileSize * gridWidth / 2
 _G.gridStartY = windowCenterY - tileSize * gridHeight / 2
 
-_G.grid = {}
-for i = 0, gridHeight - 1 do
-    row = {}
-    for j = 0, gridWidth - 1 do
-        row[j] = 0
-    end
-    grid[i] = row
-end
+_G.grid = nil
 
 _G.hardDrop = false
 
@@ -39,19 +32,67 @@ local fallSpeed = 0.1
 require 'pieces'
 
 local currentPiece = nil
+local bag = {}
+local upcoming = {}
+local hold = 0
 
-function newPiece()
-    currentPiece = IPiece(4, 0)
+function newBag()
+    local pieces = {1,2,3,4,5,6,7}
+    bag = utils.shuffle(pieces)
 end
 
-newPiece()
+function newUpcoming()
+    table.insert(upcoming,table.remove(bag,1))
+    if #bag == 0 then
+        newBag()
+    end
+end
 
+function getUpcoming()
+    newUpcoming()
+    return table.remove(upcoming,1)
+end
+
+function newPiece(hld)
+    local piece = nil
+    if hld then
+        if hold == 0 then
+            piece = getPiece(getUpcoming())
+        else
+            piece = getPiece(hold)
+        end
+    else
+        piece = getPiece(getUpcoming())
+    end
+    currentPiece = piece(4, 0)
+end
+
+math.randomseed(os.time())
 function love.load()
+    grid = {}
+    for i = 0, gridHeight - 1 do
+        row = {}
+        for j = 0, gridWidth - 1 do
+            row[j] = 0
+        end
+        grid[i] = row
+    end
+
+
+    bag = {}
+    upcoming = {}
+    hold = 0
+    newBag()
+    for i = 1, 5 do
+        newUpcoming()
+    end
+    newPiece()
 end
 
 function love.draw()
     -- grid draw
     love.graphics.setColor(1, 1, 1, 0.5)
+    love.graphics.setLineStyle("rough")
     for n = 0, tileSize * gridWidth, tileSize do
         love.graphics.line(windowCenterX - tileSize * gridWidth / 2 + n, windowCenterY - tileSize * gridHeight / 2, windowCenterX - tileSize * gridWidth / 2 + n, windowCenterY + tileSize * gridHeight / 2)
     end
@@ -62,7 +103,7 @@ function love.draw()
     currentPiece:draw()
 
     -- drawing the grid
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.setColor(1, 1, 1, 1)
     for i = 0, gridHeight - 1 do
         for j = 0, gridWidth - 1 do
             if grid[i][j] ~= 0 then
@@ -70,6 +111,24 @@ function love.draw()
                 love.graphics.rectangle('fill', j * tileSize + gridStartX, i * tileSize + gridStartY, tileSize, tileSize)
             end
         end
+    end
+
+    -- drawing the upcoming pieces
+    local y = gridStartY
+    for i = 1, #upcoming do
+        local cur = getPiece(upcoming[i])
+        cur = cur(0,0)
+        cur:draw(true, gridStartX + (gridWidth * tileSize) + tileSize, y)
+        local s = cur.size
+        if s <= 2 then s = 3 end
+        y = y + s * tileSize
+    end
+
+    -- drawing the currently held piece
+    if hold ~= 0 then
+        local holdP = getPiece(hold)
+        holdP = holdP(0,0)
+        holdP:draw(true, gridStartX - ((holdP.size + 2) * tileSize), gridStartY)
     end
 
     if displayDebug then
@@ -116,16 +175,12 @@ function love.keypressed(key)
         currentPiece:rotate("cw")
     elseif key == 'up' then
         hardDrop = true
+    elseif key == 'space' then
+        local t = currentPiece.type
+        newPiece(true)
+        hold = t
     elseif key == 'r' then
-        newPiece()
-        grid = {}
-        for i = 0, gridHeight - 1 do
-            row = {}
-            for j = 0, gridWidth - 1 do
-                row[j] = 0
-            end
-            grid[i] = row
-        end
+        love.load()
     elseif key == 'f' and love.keyboard.isDown('f3') then
         rainbowMode = not rainbowMode
     end

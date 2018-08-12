@@ -19,14 +19,18 @@ function Piece:initialize(x, y, type, size)
     end
 end
 
-function Piece:draw()
+function Piece:draw(out, xOff, yOff)
     love.graphics.setColor(colors[self.type])
     for j = 1, self.size do
         y = j - 1
         for i = 1, self.size do
             x = i - 1
             if self.grid[j][i] ~= 0 then
-                love.graphics.rectangle('fill', (self.x + x) * tileSize + gridStartX, (self.y + y) * tileSize + gridStartY, tileSize, tileSize)
+                if out then
+                    love.graphics.rectangle('fill', xOff + (i * tileSize), yOff + (j * tileSize), tileSize, tileSize)
+                else
+                    love.graphics.rectangle('fill', (self.x + x) * tileSize + gridStartX, (self.y + y) * tileSize + gridStartY, tileSize, tileSize)
+                end
             end
         end
     end
