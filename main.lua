@@ -101,6 +101,7 @@ function love.draw()
     end
 
     currentPiece:draw()
+    currentPiece:draw(true, (currentPiece.x - 1) * tileSize + gridStartX, gridStartY, true)
 
     -- drawing the grid
     love.graphics.setColor(1, 1, 1, 1)

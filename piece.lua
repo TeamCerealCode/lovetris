@@ -19,8 +19,23 @@ function Piece:initialize(x, y, type, size)
     end
 end
 
-function Piece:draw(out, xOff, yOff)
-    love.graphics.setColor(colors[self.type])
+function Piece:draw(out, xOff, yOff, isGhost)
+    if isGhost then
+        for y = self.y, gridHeight do
+            if self:collide(0, -self.y + y + 1) then
+                yOff = yOff + (y - 1) * tileSize
+                print(yOff)
+                break
+            end
+        end
+
+        local color = utils.copyTable(colors[self.type])
+        color[4] = 0.5
+        love.graphics.setColor(color)
+    else
+        love.graphics.setColor(colors[self.type])
+    end
+
     for j = 1, self.size do
         y = j - 1
         for i = 1, self.size do
