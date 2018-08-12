@@ -6,8 +6,8 @@ _G.colors = {
     {0.890, 0.357, 0.008}, -- LPiece
     {0.890, 0.624, 0.008}, -- OPiece
     {0.349, 0.694, 0.004}, -- SPiece
-    {0.686, 0.161, 0.541}, -- TPiece
     {0.843, 0.059, 0.216}, -- ZPiece
+    {0.686, 0.161, 0.541}, -- TPiece
     {0.784, 0.784, 0.784}  -- Garbage blocks
 }
 
@@ -128,20 +128,20 @@ function SPiece:initialize(x,y)
     }
 end
 
-function TPiece:initialize(x, y)
+function ZPiece:initialize(x,y)
     Piece.initialize(self, x, y, 6, 3)
     self.grid = {
-        {0, 1, 0},
-        {1, 1, 1},
+        {1, 1, 0},
+        {0, 1, 1},
         {0, 0, 0},
     }
 end
 
-function ZPiece:initialize(x,y)
+function TPiece:initialize(x, y)
     Piece.initialize(self, x, y, 7, 3)
     self.grid = {
-        {1, 1, 0},
-        {0, 1, 1},
+        {0, 1, 0},
+        {1, 1, 1},
         {0, 0, 0},
     }
 end
