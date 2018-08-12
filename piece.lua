@@ -24,7 +24,6 @@ function Piece:draw(out, xOff, yOff, isGhost)
         for y = self.y, gridHeight do
             if self:collide(0, -self.y + y + 1) then
                 yOff = yOff + (y - 1) * tileSize
-                print(yOff)
                 break
             end
         end
