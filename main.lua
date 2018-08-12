@@ -28,7 +28,7 @@ _G.hardDrop = false
 _G.hasHeld = false
 
 local fallTimer = 0
-local fallSpeed = 0.1
+local fallSpeed = 0.5
 
 local arr = 0
 local arrTimer = 0
@@ -198,10 +198,10 @@ function love.update(dt)
 
     fallTimer = fallTimer + dt
     if fallTimer > fallSpeed then
-        fallTimer = 0
-        if not currentPiece:update(dt) then
+        if not currentPiece:update(fallTimer) then
             newPiece()
         end
+        fallTimer = 0
     end
 
     clearLines()
@@ -220,7 +220,7 @@ function love.keypressed(key)
     elseif key == 'left' or key == 'right' then
         currentPiece:move(key)
     elseif key == 'down' then
-        fallSpeed = fallSpeed / 2
+        fallSpeed = fallSpeed / 50
     elseif key == 'z' then
         currentPiece:rotate("ccw")
     elseif key == 'x' then
@@ -244,7 +244,7 @@ end
 
 function love.keyreleased(key)
     if key == 'down' then
-        fallSpeed = fallSpeed * 2
+        fallSpeed = fallSpeed * 50
     end
 end
 

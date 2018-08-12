@@ -52,7 +52,7 @@ end
 
 function Piece:update(dt)
     if self:collide(0, 1) then
-        self.slideTimer = self.slideTimer + dt * 100
+        self.slideTimer = self.slideTimer + dt
         self.fall = false
     else
         self.fall = not (self.slideTimer > 0)
