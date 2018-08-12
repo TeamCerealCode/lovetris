@@ -106,7 +106,7 @@ function love.draw()
     currentPiece:draw(true, (currentPiece.x - 1) * tileSize + gridStartX, gridStartY, true)
 
     -- drawing the grid
-    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setColor(1, 1, 1)
     for i = 0, gridHeight - 1 do
         for j = 0, gridWidth - 1 do
             if grid[i][j] ~= 0 then
@@ -126,6 +126,15 @@ function love.draw()
         if s <= 2 then s = 3 end
         y = y + s * tileSize
     end
+    -- border around upcoming pieces
+    love.graphics.setColor(1,1,1,0.5)
+    love.graphics.line(gridStartX + gridWidth * tileSize, gridStartY, gridStartX + gridWidth * tileSize + 7 * tileSize, gridStartY)
+    love.graphics.line(gridStartX + gridWidth * tileSize, gridStartY+3.5*tileSize, gridStartX + gridWidth * tileSize + 7 * tileSize, gridStartY+3.5*tileSize)
+    love.graphics.line(gridStartX + gridWidth * tileSize + 7 * tileSize, gridStartY+3.5*tileSize, gridStartX + gridWidth * tileSize + 7 * tileSize, gridStartY)
+    love.graphics.line(gridStartX + gridWidth * tileSize + tileSize, gridStartY+3.5*tileSize, gridStartX + gridWidth * tileSize + tileSize, gridStartY + #upcoming*3.5 * tileSize)
+    love.graphics.line(gridStartX + gridWidth * tileSize + 6.5 * tileSize, gridStartY+3.5*tileSize, gridStartX + gridWidth * tileSize + 6.5 * tileSize, gridStartY + #upcoming*3.5 * tileSize)
+    love.graphics.line(gridStartX + gridWidth * tileSize + tileSize, gridStartY + #upcoming*3.5 * tileSize, gridStartX + gridWidth * tileSize + 6.5 * tileSize, gridStartY + #upcoming*3.5 * tileSize)
+    love.graphics.print('next', gridStartX + gridWidth * tileSize + 5, 5+gridStartY)
 
     -- drawing the currently held piece
     if hold ~= 0 then
@@ -133,7 +142,14 @@ function love.draw()
         holdP = holdP(0,0)
         holdP:draw(true, gridStartX - ((holdP.size + 2) * tileSize), gridStartY)
     end
+    -- border around held piece
+    love.graphics.setColor(1,1,1,0.5)
+    love.graphics.line(gridStartX, gridStartY, gridStartX - 5*tileSize, gridStartY)
+    love.graphics.line(gridStartX, gridStartY+4*tileSize, gridStartX - 5*tileSize, gridStartY+4*tileSize)
+    love.graphics.line(gridStartX - 5*tileSize, gridStartY, gridStartX - 5*tileSize, gridStartY+4*tileSize)
+    love.graphics.print('hold', gridStartX - 5*tileSize + 5, 5+gridStartY)
 
+    --debug menu
     if displayDebug then
         if rainbowMode and rainbowModeColor then love.graphics.setColor(rainbowModeColor)
         else love.graphics.setColor(1, 1, 1, 0.9) end
