@@ -51,12 +51,6 @@ function Piece:draw(out, xOff, yOff, isGhost)
 end
 
 function Piece:update(dt)
-    if hardDrop then
-        hardDrop = false
-        self:hardDrop()
-        return false
-    end
-
     if self:collide(0, 1) then
         self.slideTimer = self.slideTimer + dt * 100
         self.fall = false

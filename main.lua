@@ -99,7 +99,7 @@ end
 
 function love.draw()
     -- grid draw
-    love.graphics.setColor(1, 1, 1, 0.5)
+    love.graphics.setColor(1, 1, 1, 0.25)
     love.graphics.setLineStyle("rough")
     for n = 0, tileSize * gridWidth, tileSize do
         love.graphics.line(windowCenterX - tileSize * gridWidth / 2 + n, windowCenterY - tileSize * gridHeight / 2, windowCenterX - tileSize * gridWidth / 2 + n, windowCenterY + tileSize * gridHeight / 2)
@@ -202,8 +202,9 @@ function love.update(dt)
         if not currentPiece:update(dt) then
             newPiece()
         end
-        clearLines()
     end
+
+    clearLines()
 
     if rainbowMode then
         rainbowModeTimer = (rainbowModeTimer + dt) % 1
@@ -214,6 +215,8 @@ end
 function love.keypressed(key)
     if key == 'f3' then
         displayDebug = not displayDebug
+    elseif key == 'f4' then
+        love.load()
     elseif key == 'left' or key == 'right' then
         currentPiece:move(key)
     elseif key == 'down' then
@@ -222,9 +225,11 @@ function love.keypressed(key)
         currentPiece:rotate("ccw")
     elseif key == 'x' then
         currentPiece:rotate("cw")
-    elseif key == 'up' then
-        hardDrop = true
     elseif key == 'space' then
+        currentPiece:hardDrop()
+        newPiece()
+        clearLines()
+    elseif key == 'c' then
         if not hasHeld then
             local t = currentPiece.type
             newPiece(true)
