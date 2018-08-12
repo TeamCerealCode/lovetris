@@ -19,8 +19,22 @@ function Piece:initialize(x, y, type, size)
     end
 end
 
-function Piece:draw(out, xOff, yOff)
-    love.graphics.setColor(colors[self.type])
+function Piece:draw(out, xOff, yOff, isGhost)
+    if isGhost then
+        for y = self.y, gridHeight do
+            if self:collide(0, -self.y + y + 1) then
+                yOff = yOff + (y - 1) * tileSize
+                break
+            end
+        end
+
+        local color = utils.copyTable(colors[self.type])
+        color[4] = 0.5
+        love.graphics.setColor(color)
+    else
+        love.graphics.setColor(colors[self.type])
+    end
+
     for j = 1, self.size do
         y = j - 1
         for i = 1, self.size do
@@ -37,7 +51,6 @@ function Piece:draw(out, xOff, yOff)
 end
 
 function Piece:update(dt)
-    self:move()
     if hardDrop then
         hardDrop = false
         self:hardDrop()
@@ -62,35 +75,33 @@ function Piece:update(dt)
     return true
 end
 
-function Piece:move()
+function Piece:move(key)
     reverse = false
     inc = -1
     startX = 1
     endX = self.size
-    if love.keyboard.isDown('right') then
+    if key == 'right' then
         reverse = true
         inc = 1
         startX = self.size
         endX = 1
     end
 
-    if love.keyboard.isDown('left') or love.keyboard.isDown('right') then
-        for j = 1, self.size do
-            y = j - 1
-            for i = startX, endX, inc * -1 do
-                x = i - 1
-                if self.grid[j][i] ~= 0 then
-                    if grid[self.y + y][self.x + x + inc] == 0 then
-                        break
-                    else
-                        return
-                    end
+    for j = 1, self.size do
+        y = j - 1
+        for i = startX, endX, inc * -1 do
+            x = i - 1
+            if self.grid[j][i] ~= 0 then
+                if grid[self.y + y][self.x + x + inc] == 0 then
+                    break
+                else
+                    return
                 end
             end
         end
-        self.x = self.x + inc
-        self.slideTimer = 0
     end
+    self.x = self.x + inc
+    self.slideTimer = 0
 end
 
 function Piece:collide(xOffset, yOffset)

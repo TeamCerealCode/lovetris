@@ -103,6 +103,7 @@ function love.draw()
     end
 
     currentPiece:draw()
+    currentPiece:draw(true, (currentPiece.x - 1) * tileSize + gridStartX, gridStartY, true)
 
     -- drawing the grid
     love.graphics.setColor(1, 1, 1, 1)
@@ -169,6 +170,8 @@ end
 function love.keypressed(key)
     if key == 'f3' then
         displayDebug = not displayDebug
+    elseif key == 'left' or key == 'right' then
+        currentPiece:move(key)
     elseif key == 'down' then
         fallSpeed = fallSpeed / 2
     elseif key == 'z' then
