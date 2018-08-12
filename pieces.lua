@@ -128,20 +128,20 @@ function SPiece:initialize(x,y)
     }
 end
 
-function ZPiece:initialize(x,y)
+function TPiece:initialize(x, y)
     Piece.initialize(self, x, y, 6, 3)
     self.grid = {
-        {1, 1, 0},
-        {0, 1, 1},
+        {0, 1, 0},
+        {1, 1, 1},
         {0, 0, 0},
     }
 end
 
-function TPiece:initialize(x, y)
+function ZPiece:initialize(x,y)
     Piece.initialize(self, x, y, 7, 3)
     self.grid = {
-        {0, 1, 0},
-        {1, 1, 1},
+        {1, 1, 0},
+        {0, 1, 1},
         {0, 0, 0},
     }
 end
