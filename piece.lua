@@ -139,7 +139,6 @@ function Piece:rotate(direction)
     
     local kicked = false
 
-    print(self.type, self.rotation, direction)
     for _, offsets in ipairs(wallkicks[self.type][self.rotation][direction]) do
         if not self:collide(offsets[1], offsets[2]) then
             kicked = true
