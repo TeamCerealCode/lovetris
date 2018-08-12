@@ -36,23 +36,11 @@ _G.hardDrop = false
 local fallTimer = 0
 local fallSpeed = 0.1
 
-_G.colors = {
-    {0.059, 0.608, 0.843}, -- IPiece
-    {0.129, 0.255, 0.776}, -- JPiece
-    {0.890, 0.357, 0.008}, -- LPiece
-    {0.890, 0.624, 0.008}, -- OPiece
-    {0.349, 0.694, 0.004}, -- SPiece
-    {0.686, 0.161, 0.541}, -- TPiece
-    {0.843, 0.059, 0.216}, -- ZPiece
-    {0.784, 0.784, 0.784}  -- Garbage blocks
-}
-
 require 'pieces'
 
 local currentPiece = nil
 
 function newPiece()
-    -- currently only a tpiece for testing
     currentPiece = IPiece(4, 0)
 end
 
@@ -63,7 +51,7 @@ end
 
 function love.draw()
     -- grid draw
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.setColor(1, 1, 1, 0.5)
     for n = 0, tileSize * gridWidth, tileSize do
         love.graphics.line(windowCenterX - tileSize * gridWidth / 2 + n, windowCenterY - tileSize * gridHeight / 2, windowCenterX - tileSize * gridWidth / 2 + n, windowCenterY + tileSize * gridHeight / 2)
     end

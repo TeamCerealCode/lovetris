@@ -6,6 +6,10 @@ function Piece:initialize(x, y, type, size)
     self.type = type
     self.size = size
     self.grid = {}
+    self.slideTimer = 0
+    self.fall = true
+    self.rotation = 1
+
     for i = 1, self.size do
         row = {}
         for j = 1, self.size do
@@ -13,9 +17,6 @@ function Piece:initialize(x, y, type, size)
         end
         self.grid[i] = row
     end
-
-    self.slideTimer = 0
-    self.fall = true
 end
 
 function Piece:draw()
@@ -39,14 +40,14 @@ function Piece:update(dt)
         return false
     end
 
-    if self:collide() then
-        self.slideTimer = self.slideTimer + dt * 1000
+    if self:collide(0, 1) then
+        self.slideTimer = self.slideTimer + dt * 100
         self.fall = false
     else
         self.fall = not (self.slideTimer > 0)
     end
         
-    if self.slideTimer > 60 then
+    if self.slideTimer > 1 then
         self:toGrid()
         return false
     end
@@ -88,14 +89,16 @@ function Piece:move()
     end
 end
 
-function Piece:collide(yOffset)
-    yOffset = yOffset or self.y
+function Piece:collide(xOffset, yOffset)
+    xOffset = (self.x + xOffset) or self.x
+    yOffset = (self.y + yOffset) or self.y
+
     for j = 1, self.size do
         y = j - 1
         for i = 1, self.size do
             x = i - 1
             if self.grid[j][i] ~= 0 then
-                if yOffset + y + 1 >= gridHeight or grid[yOffset + y + 1][self.x + x] ~= 0 then
+                if yOffset + y >= gridHeight or xOffset + x >= gridWidth or xOffset + x >= gridWidth or grid[yOffset + y][xOffset + x] ~= 0 then
                     return true
                 end
             end
@@ -104,8 +107,10 @@ function Piece:collide(yOffset)
 end
 
 function Piece:rotate(direction)
-    oldGrid = utils.copyTable(self.grid)
-    newGrid = {}
+    if self.type == 4 then return end
+
+    local oldGrid = utils.copyTable(self.grid)
+    local newGrid = {}
 
     for i = 1, self.size do
         row = {}
@@ -126,16 +131,37 @@ function Piece:rotate(direction)
     end
 
     self.grid = newGrid
-    self.slideTimer = 0;
+    self.slideTimer = 0
     
-    if self:collide() then
+    local kicked = false
+
+    print(self.type, self.rotation, direction)
+    for _, offsets in ipairs(wallkicks[self.type][self.rotation][direction]) do
+        if not self:collide(offsets[1], offsets[2]) then
+            kicked = true
+            self.x = self.x + offsets[1]
+            self.y = self.y + offsets[2]
+            break
+        end
+    end
+
+    if not kicked then
         self.grid = oldGrid
+        return
+    end
+
+    if direction == 'ccw' then
+        self.rotation = self.rotation - 1
+        if self.rotation == 0 then self.rotation = 4 end
+    elseif direction == 'cw' then
+        self.rotation = (self.rotation + 1) % 5
+        if self.rotation == 0 then self.rotation = 1 end
     end
 end
 
 function Piece:hardDrop()
     for y = self.y, gridHeight do
-        if self:collide(y) then
+        if self:collide(0, -self.y + y + 1) then
             self.y = y
             self:toGrid()
             return true
