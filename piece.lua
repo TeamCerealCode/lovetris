@@ -180,6 +180,7 @@ function Piece:toGrid()
             end
         end
     end
+    hasHeld = false
 end
 
 

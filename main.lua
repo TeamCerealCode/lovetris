@@ -25,6 +25,7 @@ _G.gridStartY = windowCenterY - tileSize * gridHeight / 2
 _G.grid = nil
 
 _G.hardDrop = false
+_G.hasHeld = false
 
 local fallTimer = 0
 local fallSpeed = 0.1
@@ -56,6 +57,7 @@ end
 function newPiece(hld)
     local piece = nil
     if hld then
+        hasHeld = true
         if hold == 0 then
             piece = getPiece(getUpcoming())
         else
@@ -176,9 +178,11 @@ function love.keypressed(key)
     elseif key == 'up' then
         hardDrop = true
     elseif key == 'space' then
-        local t = currentPiece.type
-        newPiece(true)
-        hold = t
+        if not hasHeld then
+            local t = currentPiece.type
+            newPiece(true)
+            hold = t
+        end
     elseif key == 'r' then
         love.load()
     elseif key == 'f' and love.keyboard.isDown('f3') then
