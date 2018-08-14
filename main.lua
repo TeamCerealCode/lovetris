@@ -225,7 +225,7 @@ function love.keypressed(key)
         currentPiece:rotate("ccw")
     elseif key == 'x' then
         currentPiece:rotate("cw")
-    elseif key == 'space' then
+    elseif key == 'space' or key == 'up' then
         currentPiece:hardDrop()
         newPiece()
         clearLines()
