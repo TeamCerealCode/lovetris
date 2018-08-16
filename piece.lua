@@ -52,8 +52,12 @@ end
 
 function Piece:update(dt)
     if self:collide(0, 1) then
-        self.slideTimer = self.slideTimer + dt
-        self.fall = false
+        if self.y < 1 then
+            love.load()
+        else
+            self.slideTimer = self.slideTimer + dt
+            self.fall = false
+        end
     else
         self.fall = not (self.slideTimer > 0)
     end
@@ -66,6 +70,9 @@ function Piece:update(dt)
     if self.fall then
         self.y = self.y + 1
     end
+
+    
+
     return true
 end
 
