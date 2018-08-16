@@ -27,6 +27,8 @@ _G.grid = nil
 _G.hardDrop = false
 _G.hasHeld = false
 
+_G.linesCleared = 0
+
 local fallTimer = 0
 local fallSpeed = 0.5
 
@@ -155,6 +157,10 @@ function love.draw()
     love.graphics.line(gridStartX - 5*tileSize, gridStartY, gridStartX - 5*tileSize, gridStartY+4*tileSize)
     love.graphics.print('hold', gridStartX - 5*tileSize + 5, 5+gridStartY)
 
+    -- line counter
+    love.graphics.print('lines cleared: '..linesCleared, gridStartX, gridStartY+gridHeight*tileSize+30)
+
+
     --debug menu
     if displayDebug then
         if rainbowMode and rainbowModeColor then love.graphics.setColor(rainbowModeColor)
@@ -261,6 +267,7 @@ function clearLines()
         end
         if complete then
             moveDown(i)
+            linesCleared = linesCleared + 1
         end
     end
 end
