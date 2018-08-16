@@ -70,9 +70,7 @@ function Piece:update(dt)
     if self.fall then
         self.y = self.y + 1
     end
-
     
-
     return true
 end
 
