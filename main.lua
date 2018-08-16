@@ -222,20 +222,20 @@ function love.draw()
     love.graphics.line(gridStartX - 5*tileSize, gridStartY, gridStartX - 5*tileSize, gridStartY+4*tileSize)
     love.graphics.print('hold', gridStartX - 5*tileSize + 5, 5+gridStartY)
 
-    -- bottom stats
+    -- stats
     if mode == 1 or mode == 4 then
         if mode == 1 then
             modestring = "Infinite Tetris"
         elseif mode == 4 then
             modestring = "Sprint (MultiLi)"
         end
-        love.graphics.print(modestring.."\n"..
+        love.graphics.printf(modestring.."\n"..
         'lines cleared: '..linesCleared..'\n'..
         'timer: '..formatTime(timer)..'\n'..
         '20l time: '..formatTime(sprinttimes[1])..'\n'..
         '40l time: '..formatTime(sprinttimes[2])..'\n'..
         '100l time: '..formatTime(sprinttimes[3])..'\n', 
-        gridStartX, gridStartY+gridHeight*tileSize+30 
+        gridStartX-260, gridStartY+gridHeight/4*tileSize, 250, 'right' 
         ) 
     elseif mode == 2 or mode == 3 then
         if mode == 2 then
@@ -243,10 +243,10 @@ function love.draw()
         elseif mode == 3 then
             modestring = "Dig Extreme"
         end
-        love.graphics.print(modestring..'\n'..
+        love.graphics.printf(modestring..'\n'..
         'timer: '..formatTime(timer)..'\n'..
         'garbage blocks left: '..scanForGarbage()..'\n', 
-        gridStartX, gridStartY+gridHeight*tileSize+30 
+        gridStartX-260, gridStartY+gridHeight/4*tileSize, 250, 'right' 
         ) 
     end
     
