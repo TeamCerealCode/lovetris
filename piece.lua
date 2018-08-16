@@ -20,7 +20,7 @@ function Piece:initialize(x, y, type, size)
 end
 
 function Piece:draw(out, xOff, yOff, isGhost)
-    if isGhost then
+    if isGhost and not paused then
         for y = self.y, gridHeight do
             if self:collide(0, -self.y + y + 1) then
                 yOff = yOff + (y - 1) * tileSize
@@ -33,6 +33,13 @@ function Piece:draw(out, xOff, yOff, isGhost)
         love.graphics.setColor(color)
     else
         love.graphics.setColor(colors[self.type])
+    end
+
+    if paused and isGhost then
+        love.graphics.setColor(0,0,0,0)
+    end
+    if gameEnded and not isGhost then
+        love.graphics.setColor(0.5,0.5,0.5)
     end
 
     for j = 1, self.size do
@@ -53,7 +60,8 @@ end
 function Piece:update(dt)
     if self:collide(0, 1) then
         if self.y < 1 then
-            love.load()
+            paused = true
+            gameEnded = true
         else
             self.slideTimer = self.slideTimer + dt
             self.fall = false

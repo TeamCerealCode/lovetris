@@ -13,6 +13,14 @@ local rainbowMode = false
 local rainbowModeTimer = 0
 local rainbowModeColor
 
+local mode = 1
+-- 1 - endless tetris
+-- 2 - dig (cheese race)
+-- 3 - dig extreme
+-- 4 - sprint (multi)
+-- multisprint records your time for each ll possibility in the same match
+
+local f3held = false
 
 _G.tileSize = 20
 
@@ -27,7 +35,13 @@ _G.grid = nil
 _G.hardDrop = false
 _G.hasHeld = false
 
+_G.paused = false
+_G.gameEnded = false
+
 _G.linesCleared = 0
+
+local timer = 0
+local sprinttimes = {9999999,99999999,99999999} -- 20ll, 40ll, 100ll
 
 local fallTimer = 0
 local fallSpeed = 0.5
@@ -79,15 +93,52 @@ end
 
 math.randomseed(os.time())
 function love.load()
+
+    paused = false
+    gameEnded = false
+
+    timer = 0
+    sprinttimes = {0,0,0}
+    linesCleared = 0
+
     grid = {}
-    for i = 0, gridHeight - 1 do
-        row = {}
-        for j = 0, gridWidth - 1 do
-            row[j] = 0
-        end
-        grid[i] = row
+
+    local heights = {}
+    local currheight = 2
+    for h = 0, gridHeight - 1 do
+        currheight = currheight + math.ceil(math.random()*2-1)
+        if currheight<1 then currheight = 1 end
+        heights[h] = currheight
     end
 
+    for i = 0, gridHeight - 1 do
+        row = {}
+
+        local randomHole = math.floor(math.random()*gridWidth)
+
+        for j = 0, gridWidth - 1 do
+            if mode == 1 then --regular
+                row[j] = 0
+            elseif mode == 2 then --dig
+                if j == randomHole then
+                    row[j] = 0
+                else
+                    row[j] = 8
+                end
+            elseif mode == 3 then --digextreme
+                row[j] = (j+i%2)%2*8
+            elseif mode == 4 then --sprint (multi)
+                row[j] = 0
+            end
+
+            if i < gridHeight/2 and mode == 3 then
+                row[j] = 0
+            elseif i < math.floor(gridHeight/3) and mode == 2 then
+                row[j] = 0
+            end
+            grid[i] = row
+        end
+    end
 
     bag = {}
     upcoming = {}
@@ -115,11 +166,25 @@ function love.draw()
 
     -- drawing the grid
     love.graphics.setColor(1, 1, 1)
+    if not paused and not gameEnded then
     for i = 0, gridHeight - 1 do
         for j = 0, gridWidth - 1 do
             if grid[i][j] ~= 0 then
                 love.graphics.setColor(colors[grid[i][j]])
                 love.graphics.rectangle('fill', j * tileSize + gridStartX, i * tileSize + gridStartY, tileSize, tileSize)
+            end
+        end
+    end
+    elseif paused and not gameEnded then
+        love.graphics.print('paused - esc to unpause', gridStartX, gridStartY-20)
+    else
+        love.graphics.print('game over - press r to restart', gridStartX, gridStartY-20)
+        love.graphics.setColor(0.5,0.5,0.5)
+        for i = 0, gridHeight - 1 do
+            for j = 0, gridWidth - 1 do
+                if grid[i][j] ~= 0 then
+                    love.graphics.rectangle('fill', j * tileSize + gridStartX, i * tileSize + gridStartY, tileSize, tileSize)
+                end
             end
         end
     end
@@ -157,8 +222,34 @@ function love.draw()
     love.graphics.line(gridStartX - 5*tileSize, gridStartY, gridStartX - 5*tileSize, gridStartY+4*tileSize)
     love.graphics.print('hold', gridStartX - 5*tileSize + 5, 5+gridStartY)
 
-    -- line counter
-    love.graphics.print('lines cleared: '..linesCleared, gridStartX, gridStartY+gridHeight*tileSize+30)
+    -- bottom stats
+    if mode == 1 or mode == 4 then
+        if mode == 1 then
+            modestring = "Infinite Tetris"
+        elseif mode == 4 then
+            modestring = "Sprint (MultiLL)"
+        end
+        love.graphics.print(modestring.."\n"..
+        'lines cleared: '..linesCleared..'\n'..
+        'timer: '..formatTime(timer)..'\n'..
+        '20ll time: '..formatTime(sprinttimes[1])..'\n'..
+        '40ll time: '..formatTime(sprinttimes[2])..'\n'..
+        '100ll time: '..formatTime(sprinttimes[3])..'\n', 
+        gridStartX, gridStartY+gridHeight*tileSize+30 
+        ) 
+    elseif mode == 2 or mode == 3 then
+        if mode == 2 then
+            modestring = "Dig (Cheese Race)"
+        elseif mode == 3 then
+            modestring = "Dig Extreme"
+        end
+        love.graphics.print(modestring..'\n'..
+        'timer: '..formatTime(timer)..'\n'..
+        'garbage blocks left: '..scanForGarbage()..'\n', 
+        gridStartX, gridStartY+gridHeight*tileSize+30 
+        ) 
+    end
+    
 
 
     --debug menu
@@ -170,47 +261,55 @@ function love.draw()
             'gridx size: '..gridWidth..'\n'..
             'tile size: '..tileSize..'\n'..
             'misc variables and such:'..'\n'..
+            'timer: '..timer..'\n'..
+            'mode: '..mode..'\n'..
             'width: '..width..'\n'..
             'height: '..height..'\n'..
             'block x: '..currentPiece.x..'\n'..
             'block y: '..currentPiece.y..'\n'..
             'block slide: '..currentPiece.slideTimer..'\n'..
-            'press r to reset')
+            'press r to reset\n'..
+            'f3 + m for mode change\n'..
+            'f3 + e for force game end')
     end
 end
 
 function love.update(dt)
-    if love.keyboard.isDown('right') or love.keyboard.isDown('left') then
-        if dasMode == false then
-            dasTimer = dasTimer + dt
-            if dasTimer * 1000 > das then
-                dasMode = true
+    if not paused then timer = timer + dt end
+    if not paused then
+        if love.keyboard.isDown('right') or love.keyboard.isDown('left') then
+            if dasMode == false then
+                dasTimer = dasTimer + dt
+                if dasTimer * 1000 > das then
+                    dasMode = true
+                end
+            else
+                arrTimer = arrTimer + dt
+                if arrTimer * 1000 > arr then
+                    if love.keyboard.isDown('right') then
+                        currentPiece:move('right')
+                    elseif love.keyboard.isDown('left') then
+                        currentPiece:move('left')
+                    end
+                    arrTimer = 0
+                end
             end
         else
-            arrTimer = arrTimer + dt
-            if arrTimer * 1000 > arr then
-                if love.keyboard.isDown('right') then
-                    currentPiece:move('right')
-                elseif love.keyboard.isDown('left') then
-                    currentPiece:move('left')
-                end
-                arrTimer = 0
+           dasTimer = 0
+            dasMode = false
+        end
+
+        fallTimer = fallTimer + dt
+        if fallTimer > fallSpeed then
+            if not currentPiece:update(fallTimer) then
+                newPiece()
             end
+            fallTimer = 0
         end
-    else
-        dasTimer = 0
-        dasMode = false
-    end
 
-    fallTimer = fallTimer + dt
-    if fallTimer > fallSpeed then
-        if not currentPiece:update(fallTimer) then
-            newPiece()
-        end
-        fallTimer = 0
-    end
+        clearLines()
 
-    clearLines()
+    end
 
     if rainbowMode then
         rainbowModeTimer = (rainbowModeTimer + dt) % 1
@@ -219,19 +318,17 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
-    if key == 'f3' then
-        displayDebug = not displayDebug
-    elseif key == 'f4' then
+    if key == 'f4' then
         love.load()
-    elseif key == 'left' or key == 'right' then
+    elseif (key == 'left' or key == 'right') and not paused then
         currentPiece:move(key)
-    elseif key == 'down' then
+    elseif key == 'down' and not paused then
         fallSpeed = fallSpeed / 50
-    elseif key == 'z' then
+    elseif key == 'z' and not paused then
         currentPiece:rotate("ccw")
-    elseif key == 'x' then
+    elseif key == 'x' and not paused then
         currentPiece:rotate("cw")
-    elseif key == 'space' or key == 'up' then
+    elseif (key == 'space' or key == 'up') and not paused then
         currentPiece:hardDrop()
         newPiece()
         clearLines()
@@ -245,15 +342,84 @@ function love.keypressed(key)
         love.load()
     elseif key == 'f' and love.keyboard.isDown('f3') then
         rainbowMode = not rainbowMode
+        f3held = true
+    elseif key == 'm' and love.keyboard.isDown('f3') then
+        f3held = true
+        mode = mode + 1
+        if mode == 5 then
+            mode = 1
+        end
+        love:load()
+    elseif key == 'escape' then
+        pause()
+    elseif key == 'e' then
+        f3held = true
+        endGame()
     end
 end
 
 function love.keyreleased(key)
-    if key == 'down' then
+    if key == 'f3' then
+        if not f3held then
+            displayDebug = not displayDebug
+        else
+            f3held = false
+        end
+    elseif key == 'down' then
         fallSpeed = fallSpeed * 50
+    end
+    
+end
+
+function pause()
+    if not gameEnded then
+        paused = not paused
     end
 end
 
+function scanForGarbage() 
+    local garbageAmount = 0
+    for i = 0, gridHeight - 1 do
+        for j = 0, gridWidth - 1 do
+            if grid[i][j] == 8 then garbageAmount = garbageAmount + 1 end
+        end
+    end
+    return garbageAmount
+end
+
+function endGame()
+    pause()
+    gameEnded = true
+end
+
+function formatTime(s)
+    ms = math.floor(s*1000)
+    s = math.floor(s)
+    m = math.floor(s/60)
+    
+    ms = ms%1000
+    s = s%60
+    m = m%60
+
+    mstring = m
+    sstring = s
+    msstring = ms
+
+
+    if m < 10 then
+        mstring = '0'..m..''
+    end
+    if s < 10 then
+        sstring = '0'..s..''
+    end
+    if ms < 10 then
+        msstring = '00'..ms..''
+    elseif ms > 9 and ms < 100 then
+        msstring = '0'..ms..''
+    end
+
+    return mstring ..':'.. sstring ..'.'.. msstring
+end
 
 function clearLines()
     for i = 0, gridHeight - 1 do
@@ -268,6 +434,20 @@ function clearLines()
         if complete then
             moveDown(i)
             linesCleared = linesCleared + 1
+            if mode == 4 then
+                if linesCleared == 20 then
+                    sprinttimes[1] = timer
+                elseif linesCleared == 40 then
+                    sprinttimes[2] = timer
+                elseif linesCleared == 100 then
+                    sprinttimes[3] = timer
+                    endGame()
+                end
+            elseif mode == 3 or mode == 2 then
+                if scanForGarbage() < 1 then
+                    endGame()
+                end
+            end
         end
     end
 end
