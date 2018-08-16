@@ -352,7 +352,7 @@ function love.keypressed(key)
         love:load()
     elseif key == 'escape' then
         pause()
-    elseif key == 'e' then
+    elseif key == 'e' and love.keyboard.isDown('f3') then
         f3held = true
         endGame()
     end
