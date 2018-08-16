@@ -70,7 +70,7 @@ function Piece:update(dt)
     if self.fall then
         self.y = self.y + 1
     end
-    
+
     return true
 end
 
@@ -100,7 +100,10 @@ function Piece:move(key)
         end
     end
     self.x = self.x + inc
-    self.slideTimer = 0
+    self.slideTimer = self.slideTimer - 0.05
+    if self.slideTimer < 0 then
+        self.slideTimer = 0
+    end
 end
 
 function Piece:collide(xOffset, yOffset)
