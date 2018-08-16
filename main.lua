@@ -41,7 +41,7 @@ _G.gameEnded = false
 _G.linesCleared = 0
 
 local timer = 0
-local sprinttimes = {9999999,99999999,99999999} -- 20ll, 40ll, 100ll
+local sprinttimes = {0,0,0} -- 20ll, 40ll, 100ll
 
 local fallTimer = 0
 local fallSpeed = 0.5
