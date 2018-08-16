@@ -18,7 +18,7 @@ local mode = 1
 -- 2 - dig (cheese race)
 -- 3 - dig extreme
 -- 4 - sprint (multi)
--- multisprint records your time for each ll possibility in the same match
+-- multisprint records your time for each line possibility in the same match
 
 local f3held = false
 
@@ -227,14 +227,14 @@ function love.draw()
         if mode == 1 then
             modestring = "Infinite Tetris"
         elseif mode == 4 then
-            modestring = "Sprint (MultiLL)"
+            modestring = "Sprint (MultiLi)"
         end
         love.graphics.print(modestring.."\n"..
         'lines cleared: '..linesCleared..'\n'..
         'timer: '..formatTime(timer)..'\n'..
-        '20ll time: '..formatTime(sprinttimes[1])..'\n'..
-        '40ll time: '..formatTime(sprinttimes[2])..'\n'..
-        '100ll time: '..formatTime(sprinttimes[3])..'\n', 
+        '20l time: '..formatTime(sprinttimes[1])..'\n'..
+        '40l time: '..formatTime(sprinttimes[2])..'\n'..
+        '100l time: '..formatTime(sprinttimes[3])..'\n', 
         gridStartX, gridStartY+gridHeight*tileSize+30 
         ) 
     elseif mode == 2 or mode == 3 then
