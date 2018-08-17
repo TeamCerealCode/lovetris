@@ -13,6 +13,8 @@ local rainbowMode = false
 local rainbowModeTimer = 0
 local rainbowModeColor
 
+local maximized = false
+
 local mode = 1
 -- 1 - endless tetris
 -- 2 - dig (cheese race)
@@ -275,6 +277,16 @@ function love.draw()
 end
 
 function love.update(dt)
+    if love.window.isMaximized() then
+        if not maximized then
+            maximized = true
+            love.resize(love.graphics.getWidth(),love.graphics.getHeight())
+        end
+    elseif maximized then
+        maximized = false
+        love.resize(love.graphics.getWidth(),love.graphics.getHeight())
+    end
+
     if not paused then timer = timer + dt end
     if not paused then
         if love.keyboard.isDown('right') or love.keyboard.isDown('left') then
