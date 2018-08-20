@@ -42,6 +42,12 @@ _G.gameEnded = false
 
 _G.linesCleared = 0
 
+local score
+local backtoback
+
+_G.dropbonus = 0
+_G.softDropping = false
+
 local timer = 0
 local sprinttimes = {}
 
@@ -98,6 +104,11 @@ function love.load()
 
     paused = false
     gameEnded = false
+
+    dropbonus = 0
+
+    score = 0
+    backtoback = false
 
     timer = 0
     sprinttimes = {0,0,0}
@@ -232,6 +243,7 @@ function love.draw()
             modestring = "Sprint (MultiLi)"
         end
         love.graphics.printf(modestring.."\n"..
+        'score: '..score..'\n'..
         'lines cleared: '..linesCleared..'\n'..
         'timer: '..formatTime(timer)..'\n'..
         '20l time: '..formatTime(sprinttimes[1])..'\n'..
@@ -246,6 +258,7 @@ function love.draw()
             modestring = "Dig Extreme"
         end
         love.graphics.printf(modestring..'\n'..
+        'score: '..score..'\n'..
         'timer: '..formatTime(timer)..'\n'..
         'garbage blocks left: '..scanForGarbage()..'\n', 
         gridStartX-260, gridStartY+gridHeight/4*tileSize, 250, 'right' 
@@ -336,12 +349,14 @@ function love.keypressed(key)
         currentPiece:move(key)
     elseif key == 'down' and not paused then
         fallSpeed = fallSpeed / 50
+        softDropping = true
     elseif key == 'z' and not paused then
         currentPiece:rotate("ccw")
     elseif key == 'x' and not paused then
         currentPiece:rotate("cw")
     elseif (key == 'space' or key == 'up') and not paused then
         currentPiece:hardDrop()
+        score = score + dropbonus
         newPiece()
         clearLines()
     elseif key == 'c' then
@@ -379,6 +394,8 @@ function love.keyreleased(key)
         end
     elseif key == 'down' then
         fallSpeed = fallSpeed * 50
+        softDropping = false
+        score = score + dropbonus
     end
     
 end
@@ -434,6 +451,7 @@ function formatTime(s)
 end
 
 function clearLines()
+    local linesCurrent = 0
     for i = 0, gridHeight - 1 do
         row = grid[i]
         complete = true
@@ -445,6 +463,7 @@ function clearLines()
         end
         if complete then
             moveDown(i)
+            linesCurrent = linesCurrent + 1
             linesCleared = linesCleared + 1
             if mode == 4 then
                 if linesCleared == 20 then
@@ -462,6 +481,24 @@ function clearLines()
             end
         end
     end
+    -- lua for the love of god, PLEASE add switches
+    if linesCurrent == 1 then
+        score = score + 100
+    elseif linesCurrent == 2 then
+        score = score + 300
+    elseif linesCurrent == 3 then
+        score = score + 500
+    elseif linesCurrent == 4 and backtoback then
+        score = score + 1200
+    elseif linesCurrent == 4 then
+        score = score + 800
+        backtoback = true
+    end
+
+    if linesCurrent < 4 then
+        backtoback = false
+    end
+    
 end
 
 function moveDown(h)

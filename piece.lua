@@ -77,6 +77,9 @@ function Piece:update(dt)
 
     if self.fall then
         self.y = self.y + 1
+        if softDropping then
+            dropbonus = dropbonus + 1
+        end
     end
 
     return true
@@ -189,6 +192,11 @@ function Piece:hardDrop()
             self.y = y
             self:toGrid()
             return true
+        else
+            --if dropbonus < 41 then
+            --    dropbonus = dropbonus + 2
+            --end
+            --doesnt work
         end
     end
 end
