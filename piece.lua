@@ -126,7 +126,8 @@ function Piece:collide(xOffset, yOffset)
         for i = 1, self.size do
             x = i - 1
             if self.grid[j][i] ~= 0 then
-                if yOffset + y >= gridHeight or xOffset + x >= gridWidth or xOffset + x >= gridWidth or grid[yOffset + y][xOffset + x] ~= 0 then
+                if yOffset + y <= 0 or
+                    (yOffset + y >= gridHeight or xOffset + x >= gridWidth or xOffset + x >= gridWidth or grid[yOffset + y][xOffset + x] ~= 0) then
                     return true
                 end
             end
