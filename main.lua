@@ -24,6 +24,13 @@ local mode = 1
 
 local f3held = false
 
+_G.sounds = {}
+
+for _, filename in ipairs({"I","J","L","O","S","Z","T"}) do
+    local source = love.audio.newSource("sounds/"..filename..".wav", "static")
+    table.insert(sounds, source)
+end
+
 _G.tileSize = 20
 
 _G.gridWidth = 10
@@ -359,6 +366,10 @@ function love.keypressed(key)
         score = score + dropbonus
         newPiece()
         clearLines()
+
+        local sound = sounds[upcoming[#upcoming]]
+        sound:stop()
+        sound:play()
     elseif key == 'c' then
         if not hasHeld then
             local t = currentPiece.type
