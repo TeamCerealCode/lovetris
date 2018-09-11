@@ -1,6 +1,17 @@
 _G.utils = require 'utils'
 _G.class = require 'libs.middleclass'
 _G.inspect = require 'libs.inspect'
+_G.sock = require 'libs.sock'
+
+_G.client = sock.newClient("localhost", 9757)
+
+client:on("updateBoard", function(data)
+    print(inspect(_G.grid))
+    _G.grid = data
+    print(inspect(_G.grid))
+end)
+
+client:connect()
 
 local width = love.graphics.getWidth()
 local height = love.graphics.getHeight()
@@ -297,6 +308,8 @@ function love.draw()
 end
 
 function love.update(dt)
+    client:update()
+
     if love.window.isMaximized() then
         if not maximized then
             maximized = true
